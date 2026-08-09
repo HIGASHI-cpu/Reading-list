@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1B2233">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>文献目録</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --ink:#1B2233; --ink-light:#232B40; --paper:#F1E9D8; --paper-line:#DCCFAF;
+    --ink-text:#241F18; --brass:#B98A46; --brass-dark:#8C6A34; --teal:#3F6355;
+    --stamp:#8C4A38; --cream:#EFE6D2; --muted:#5C5142;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ink);font-family:-apple-system,system-ui,sans-serif;color:var(--cream);
+       padding-bottom:96px; -webkit-tap-highlight-color:transparent;}
+  h1,h2,h3{margin:0;}
+  .serif{font-family:Georgia,"Iowan Old Style",serif;}
+  .mono{font-family:ui-monospace,"SF Mono",monospace;}
+
+  header{position:sticky;top:0;z-index:5;background:var(--ink);border-bottom:1px solid var(--brass-dark);
+         padding:18px 16px 14px;}
+  .headrow{display:flex;justify-content:space-between;align-items:flex-start;}
+  header h1{font-size:22px;color:var(--cream);}
+  .sub{color:var(--brass);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:3px;}
+  #exportBtn{background:var(--brass);color:var(--ink);border:none;padding:9px 13px;border-radius:3px;
+             font-size:13px;font-weight:600;}
+  #exportBtn:disabled{background:var(--ink-light);color:#6B7280;opacity:.6;}
+  .searchWrap{position:relative;margin-top:14px;}
+  .searchWrap span{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--brass-dark);font-size:14px;}
+  #searchInput{width:100%;padding:10px 12px 10px 32px;border-radius:3px;border:1px solid var(--brass-dark);
+               background:var(--ink-light);color:var(--cream);font-size:14px;}
+
+  main{padding:16px;max-width:640px;margin:0 auto;}
+  .empty{text-align:center;padding:60px 20px;color:var(--cream);}
+  .empty .icon{font-size:30px;opacity:.6;}
+  .empty p{font-size:13px;margin-top:10px;}
+  .empty .hint{color:#8B93A6;font-size:12px;margin-top:2px;}
+
+  .card{position:relative;background:var(--paper);border:1px solid var(--paper-line);border-radius:3px;
+        box-shadow:0 3px 8px rgba(0,0,0,.25);margin-bottom:12px;}
+  .tab{position:absolute;top:-10px;left:12px;background:var(--ink);color:var(--brass);
+       font-size:10px;font-weight:600;letter-spacing:.05em;padding:2px 7px;border-radius:2px;}
+  .stamp{position:absolute;top:12px;right:12px;border:1.5px dashed var(--stamp);color:var(--stamp);
+         font-size:9px;font-weight:600;text-align:center;line-height:1.2;padding:4px 6px;border-radius:999px;
+         transform:rotate(-8deg);}
+  .cardbody{padding:26px 16px 12px;}
+  .cardbody h3{font-size:16px;color:var(--ink-text);padding-right:60px;line-height:1.35;}
+  .meta{color:var(--muted);font-size:12px;margin-top:4px;}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .badge{font-size:10px;padding:3px 9px;border-radius:999px;font-weight:600;color:var(--cream);}
+  .badge.primary{background:var(--teal);}
+  .badge.secondary{background:var(--brass-dark);}
+  .badge.lang{background:#D9CBA0;color:var(--ink-text);}
+  .badge.tag{background:#EDE3C8;color:var(--muted);font-weight:400;}
+  .notes{color:#3A3226;font-size:12px;margin-top:10px;line-height:1.6;white-space:pre-wrap;}
+  .actions{display:flex;justify-content:flex-end;gap:14px;margin-top:12px;padding-top:10px;
+           border-top:1px dashed var(--paper-line);}
+  .actions button{background:none;border:none;font-size:11px;display:flex;align-items:center;gap:4px;padding:0;}
+  .actions .edit{color:var(--muted);}
+  .actions .del{color:var(--stamp);}
+
+  #addBtn{position:fixed;bottom:24px;right:20px;width:56px;height:56px;border-radius:50%;
+          background:var(--brass);color:var(--ink);border:none;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,.4);
+          line-height:0;}
+
+  #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;align-items:flex-end;justify-content:center;}
+  #overlay.show{display:flex;}
+  #sheet{width:100%;max-width:640px;max-height:88vh;overflow-y:auto;background:var(--cream);
+         border-radius:10px 10px 0 0;}
+  .sheethead{position:sticky;top:0;background:var(--cream);display:flex;justify-content:space-between;
+             align-items:center;padding:14px 16px;border-bottom:1px solid var(--paper-line);}
+  .sheethead h2{font-size:17px;color:var(--ink-text);}
+  .sheethead button{background:none;border:none;font-size:20px;color:var(--muted);}
+  .formbody{padding:14px 16px 20px;}
+  label{display:block;margin-bottom:12px;}
+  label span{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px;}
+  input,select,textarea{width:100%;padding:9px 10px;border-radius:3px;border:1px solid var(--paper-line);
+                          background:var(--paper);color:var(--ink-text);font-size:14px;font-family:inherit;}
+  textarea{resize:vertical;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  #formError{color:var(--stamp);font-size:12px;margin:0 0 8px;}
+  .formbtns{display:flex;gap:10px;margin-top:6px;}
+  .formbtns button{flex:1;padding:11px;border-radius:3px;border:none;font-size:14px;font-weight:600;}
+  #cancelBtn{background:#E3D8B8;color:var(--ink-text);}
+  #saveBtn{background:var(--brass);color:var(--ink);}
+
+  #lockScreen{position:fixed;inset:0;background:var(--ink);z-index:50;display:flex;flex-direction:column;
+              align-items:center;justify-content:center;padding:24px;}
+  #lockScreen h1{color:var(--cream);font-size:20px;margin-bottom:6px;}
+  #lockScreen p{color:#8B93A6;font-size:12px;margin-bottom:20px;text-align:center;}
+  #pinInput{width:100%;max-width:220px;padding:12px;border-radius:3px;border:1px solid var(--brass-dark);
+            background:var(--ink-light);color:var(--cream);font-size:20px;text-align:center;
+            letter-spacing:.3em;}
+  #unlockBtn{margin-top:14px;background:var(--brass);color:var(--ink);border:none;padding:11px 28px;
+             border-radius:3px;font-size:14px;font-weight:600;}
+  #pinError{color:var(--stamp);font-size:12px;margin-top:10px;display:none;}
+  #appRoot{display:none;}
+</style>
+</head>
+<body>
+
+<div id="lockScreen">
+  <h1 class="serif">文献目録</h1>
+  <p>PINを入力してください</p>
+  <input id="pinInput" type="password" inputmode="numeric" maxlength="6" autocomplete="off">
+  <button id="unlockBtn">開く</button>
+  <p id="pinError">PINが違います</p>
+</div>
+
+<div id="appRoot">
+<header>
+  <div class="headrow">
+    <div>
+      <h1 class="serif">文献目録</h1>
+      <p class="sub mono">Literature Index · <span id="countLabel">0</span> 件</p>
+    </div>
+    <button id="exportBtn" disabled>Excel</button>
+  </div>
+  <div class="searchWrap">
+    <span>&#128269;</span>
+    <input id="searchInput" placeholder="タイトル・著者・タグで検索">
+  </div>
+</header>
+
+<main>
+  <div id="list"></div>
+</main>
+
+<button id="addBtn" aria-label="文献を追加">+</button>
+
+<div id="overlay">
+  <div id="sheet">
+    <div class="sheethead">
+      <h2 class="serif" id="formTitle">文献を追加</h2>
+      <button id="closeBtn">&times;</button>
+    </div>
+    <div class="formbody">
+      <label><span>タイトル *</span><input id="fTitle" placeholder="論文・書籍名"></label>
+      <div class="row2">
+        <label><span>著者</span><input id="fAuthor"></label>
+        <label><span>出版年</span><input id="fYear" placeholder="2024"></label>
+      </div>
+      <label><span>出典（誌名・出版社など）</span><input id="fSource"></label>
+      <div class="row2">
+        <label><span>言語</span>
+          <select id="fLanguage">
+            <option>日本語</option><option>英語</option><option>ヘブライ語</option>
+            <option>アラビア語</option><option>その他</option>
+          </select>
+        </label>
+        <label><span>種別</span>
+          <select id="fSourceType"><option>一次資料</option><option>二次資料</option></select>
+        </label>
+      </div>
+      <label><span>タグ（カンマ区切り）</span><input id="fTags" placeholder="kin-state, 論文3"></label>
+      <label><span>読了日</span><input id="fDateRead" type="date"></label>
+      <label><span>メモ・要約</span><textarea id="fNotes" rows="4" placeholder="要点、引用箇所、自分の論文との関連など"></textarea></label>
+      <p id="formError" style="display:none;"></p>
+      <div class="formbtns">
+        <button id="cancelBtn">キャンセル</button>
+        <button id="saveBtn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const PIN = '593187'; // ← このPINを変えたい場合はここの数字を書き換えて保存し直してください
+(function(){
+  const lockScreen = document.getElementById('lockScreen');
+  const appRoot = document.getElementById('appRoot');
+  const pinInput = document.getElementById('pinInput');
+  const pinError = document.getElementById('pinError');
+  const unlockBtn = document.getElementById('unlockBtn');
+
+  if(localStorage.getItem('lt-unlocked') === 'true'){
+    lockScreen.style.display = 'none';
+    appRoot.style.display = 'block';
+  }
+
+  function tryUnlock(){
+    if(pinInput.value === PIN){
+      localStorage.setItem('lt-unlocked', 'true');
+      lockScreen.style.display = 'none';
+      appRoot.style.display = 'block';
+    } else {
+      pinError.style.display = 'block';
+      pinInput.value = '';
+    }
+  }
+  unlockBtn.onclick = tryUnlock;
+  pinInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') tryUnlock(); });
+})();
+
+const STORAGE_KEY = 'literature-entries-v1';
+let entries = [];
+let editingId = null;
+
+function loadEntries(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY); entries = raw ? JSON.parse(raw) : []; }
+  catch(e){ entries = []; }
+}
+function saveEntries(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
+  catch(e){ alert('保存に失敗しました。端末のストレージ容量を確認してください。'); }
+}
+function emptyForm(){
+  return {title:'',author:'',year:'',source:'',language:'日本語',sourceType:'二次資料',
+          tags:'',dateRead:new Date().toISOString().slice(0,10),notes:''};
+}
+function fmtStamp(d){ if(!d) return ''; const [y,m,dd]=d.split('-'); return `${y}.${m}.${dd}`; }
+function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function render(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const filtered = entries
+    .filter(e => !q || [e.title,e.author,e.tags,e.source].join(' ').toLowerCase().includes(q))
+    .sort((a,b) => (b.dateRead||'').localeCompare(a.dateRead||''));
+
+  document.getElementById('countLabel').textContent = entries.length;
+  document.getElementById('exportBtn').disabled = entries.length === 0;
+
+  const list = document.getElementById('list');
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty">
+      <div class="icon">&#128214;</div>
+      <p>${entries.length===0 ? 'まだ文献が登録されていません。' : '該当する文献が見つかりません。'}</p>
+      ${entries.length===0 ? '<p class="hint">右下の + から読んだ論文を追加してください</p>' : ''}
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(e => {
+    const tags = (e.tags||'').split(',').map(t=>t.trim()).filter(Boolean)
+      .map(t => `<span class="badge tag">#${esc(t)}</span>`).join('');
+    return `<div class="card">
+      <div class="tab mono">識-${String(e.no).padStart(3,'0')}</div>
+      ${e.dateRead ? `<div class="stamp mono">READ<br>${fmtStamp(e.dateRead)}</div>` : ''}
+      <div class="cardbody">
+        <h3 class="serif">${esc(e.title)}</h3>
+        <p class="meta">${[e.author,e.year,e.source].filter(Boolean).map(esc).join(' ・ ')}</p>
+        <div class="badges">
+          <span class="badge ${e.sourceType==='一次資料'?'primary':'secondary'}">${esc(e.sourceType)}</span>
+          <span class="badge lang">${esc(e.language)}</span>
+          ${tags}
+        </div>
+        ${e.notes ? `<p class="notes">${esc(e.notes)}</p>` : ''}
+        <div class="actions">
+          <button class="edit" onclick="openEdit('${e.id}')">&#9998; 編集</button>
+          <button class="del" onclick="handleDelete('${e.id}')">&#128465; 削除</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openAdd(){
+  editingId = null;
+  fillForm(emptyForm());
+  document.getElementById('formTitle').textContent = '文献を追加';
+  showForm();
+}
+function openEdit(id){
+  const e = entries.find(x => x.id === id);
+  if(!e) return;
+  editingId = id;
+  fillForm(e);
+  document.getElementById('formTitle').textContent = '文献を編集';
+  showForm();
+}
+function fillForm(f){
+  document.getElementById('fTitle').value = f.title;
+  document.getElementById('fAuthor').value = f.author;
+  document.getElementById('fYear').value = f.year;
+  document.getElementById('fSource').value = f.source;
+  document.getElementById('fLanguage').value = f.language;
+  document.getElementById('fSourceType').value = f.sourceType;
+  document.getElementById('fTags').value = f.tags;
+  document.getElementById('fDateRead').value = f.dateRead;
+  document.getElementById('fNotes').value = f.notes;
+  document.getElementById('formError').style.display = 'none';
+}
+function showForm(){ document.getElementById('overlay').classList.add('show'); }
+function closeForm(){ document.getElementById('overlay').classList.remove('show'); }
+
+function handleSave(){
+  const title = document.getElementById('fTitle').value.trim();
+  if(!title){
+    const err = document.getElementById('formError');
+    err.textContent = 'タイトルは必須です';
+    err.style.display = 'block';
+    return;
+  }
+  const form = {
+    title, author: document.getElementById('fAuthor').value.trim(),
+    year: document.getElementById('fYear').value.trim(),
+    source: document.getElementById('fSource').value.trim(),
+    language: document.getElementById('fLanguage').value,
+    sourceType: document.getElementById('fSourceType').value,
+    tags: document.getElementById('fTags').value.trim(),
+    dateRead: document.getElementById('fDateRead').value,
+    notes: document.getElementById('fNotes').value.trim(),
+  };
+  if(editingId){
+    entries = entries.map(e => e.id === editingId ? {...form, id:editingId, no:e.no} : e);
+  } else {
+    const nextNo = entries.reduce((m,e) => Math.max(m, e.no||0), 0) + 1;
+    entries.push({...form, id: `${Date.now()}`, no: nextNo});
+  }
+  saveEntries();
+  closeForm();
+  render();
+}
+
+function handleDelete(id){
+  if(!confirm('この文献を削除しますか?')) return;
+  entries = entries.filter(e => e.id !== id);
+  saveEntries();
+  render();
+}
+
+function handleExport(){
+  if(entries.length === 0) return;
+  const rows = entries.slice().sort((a,b)=>(a.no||0)-(b.no||0)).map(e => ({
+    'No.': e.no, 'タイトル': e.title, '著者': e.author, '出版年': e.year, '出典': e.source,
+    '言語': e.language, '種別': e.sourceType, 'タグ': e.tags, '読了日': e.dateRead, 'メモ': e.notes
+  }));
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:10},{wch:10},{wch:22},{wch:12},{wch:45}];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, '文献目録');
+  XLSX.writeFile(wb, `文献目録_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+document.getElementById('addBtn').onclick = openAdd;
+document.getElementById('closeBtn').onclick = closeForm;
+document.getElementById('cancelBtn').onclick = closeForm;
+document.getElementById('saveBtn').onclick = handleSave;
+document.getElementById('exportBtn').onclick = handleExport;
+document.getElementById('overlay').onclick = (ev) => { if(ev.target.id === 'overlay') closeForm(); };
+document.getElementById('searchInput').oninput = render;
+
+loadEntries();
+render();
+</script>
+</body>
+</html>
