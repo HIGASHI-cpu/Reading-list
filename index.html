@@ -18,19 +18,23 @@
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--ink);font-family:-apple-system,system-ui,sans-serif;color:var(--cream);
-       padding-bottom:96px; -webkit-tap-highlight-color:transparent;}
+       padding-bottom:calc(96px + env(safe-area-inset-bottom, 0px)); -webkit-tap-highlight-color:transparent;}
   h1,h2,h3{margin:0;}
   .serif{font-family:Georgia,"Iowan Old Style",serif;}
   .mono{font-family:ui-monospace,"SF Mono",monospace;}
 
   header{position:sticky;top:0;z-index:5;background:var(--ink);border-bottom:1px solid var(--brass-dark);
-         padding:18px 16px 14px;}
+         padding:calc(env(safe-area-inset-top, 0px) + 16px) 16px 14px;}
   .headrow{display:flex;justify-content:space-between;align-items:flex-start;}
   header h1{font-size:22px;color:var(--cream);}
   .sub{color:var(--brass);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:3px;}
   #exportBtn{background:var(--brass);color:var(--ink);border:none;padding:9px 13px;border-radius:3px;
              font-size:13px;font-weight:600;}
   #exportBtn:disabled{background:var(--ink-light);color:#6B7280;opacity:.6;}
+  #settingsBtn{background:var(--ink-light);color:var(--brass);border:1px solid var(--brass-dark);
+               border-radius:3px;padding:9px 11px;font-size:14px;margin-left:8px;}
+  .headbtns{display:flex;align-items:flex-start;}
+  #syncStatus{color:#8B93A6;font-size:10px;margin-top:6px;}
   .searchWrap{position:relative;margin-top:14px;}
   .searchWrap span{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--brass-dark);font-size:14px;}
   #searchInput{width:100%;padding:10px 12px 10px 32px;border-radius:3px;border:1px solid var(--brass-dark);
@@ -65,19 +69,19 @@
   .actions .edit{color:var(--muted);}
   .actions .del{color:var(--stamp);}
 
-  #addBtn{position:fixed;bottom:24px;right:20px;width:56px;height:56px;border-radius:50%;
+  #addBtn{position:fixed;bottom:calc(24px + env(safe-area-inset-bottom, 0px));right:20px;width:56px;height:56px;border-radius:50%;
           background:var(--brass);color:var(--ink);border:none;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,.4);
           line-height:0;}
 
-  #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;align-items:flex-end;justify-content:center;}
-  #overlay.show{display:flex;}
-  #sheet{width:100%;max-width:640px;max-height:88vh;overflow-y:auto;background:var(--cream);
+  #overlay,#settingsOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;align-items:flex-end;justify-content:center;}
+  #overlay.show,#settingsOverlay.show{display:flex;}
+  #sheet,#settingsSheet{width:100%;max-width:640px;max-height:88vh;overflow-y:auto;background:var(--cream);
          border-radius:10px 10px 0 0;}
   .sheethead{position:sticky;top:0;background:var(--cream);display:flex;justify-content:space-between;
              align-items:center;padding:14px 16px;border-bottom:1px solid var(--paper-line);}
   .sheethead h2{font-size:17px;color:var(--ink-text);}
   .sheethead button{background:none;border:none;font-size:20px;color:var(--muted);}
-  .formbody{padding:14px 16px 20px;}
+  .formbody{padding:14px 16px calc(20px + env(safe-area-inset-bottom, 0px));}
   label{display:block;margin-bottom:12px;}
   label span{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px;}
   input,select,textarea{width:100%;padding:9px 10px;border-radius:3px;border:1px solid var(--paper-line);
@@ -89,6 +93,26 @@
   .formbtns button{flex:1;padding:11px;border-radius:3px;border:none;font-size:14px;font-weight:600;}
   #cancelBtn{background:#E3D8B8;color:var(--ink-text);}
   #saveBtn{background:var(--brass);color:var(--ink);}
+
+  .citeHead{display:flex;justify-content:space-between;align-items:center;margin:4px 0 8px;}
+  .citeHead span{font-size:12px;color:var(--muted);font-weight:600;}
+  #addCitationBtn{width:auto;background:none;border:1px solid var(--brass-dark);color:var(--brass-dark);
+                   padding:5px 10px;border-radius:3px;font-size:11px;font-weight:600;}
+  .citeRow{border:1px solid var(--paper-line);border-radius:3px;padding:10px;margin-bottom:10px;
+           background:rgba(0,0,0,.03);position:relative;}
+  .citeRow .row2{grid-template-columns:1fr 2fr;gap:8px;}
+  .citeRow label{margin-bottom:8px;}
+  .citeRemove{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--stamp);
+              font-size:11px;width:auto;padding:0;}
+
+  .abstract{color:#3A3226;font-size:12px;margin-top:8px;line-height:1.6;font-style:italic;
+            border-left:2px solid var(--brass-dark);padding-left:8px;}
+  .citeBlock{margin-top:10px;padding-top:8px;border-top:1px dashed var(--paper-line);}
+  .citeBlock h4{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+  .citeItem{border-left:2px solid var(--teal);padding:2px 0 2px 8px;margin-bottom:8px;}
+  .citeItem .q{color:#241F18;font-size:12px;line-height:1.6;white-space:pre-wrap;}
+  .citeItem .p{color:var(--muted);font-size:10px;margin-top:2px;}
+  .citeItem .n{color:#5C5142;font-size:11px;margin-top:2px;}
 
   #lockScreen{position:fixed;inset:0;background:var(--ink);z-index:50;display:flex;flex-direction:column;
               align-items:center;justify-content:center;padding:24px;}
@@ -120,12 +144,16 @@
       <h1 class="serif">文献目録</h1>
       <p class="sub mono">Literature Index · <span id="countLabel">0</span> 件</p>
     </div>
-    <button id="exportBtn" disabled>Excel</button>
+    <div class="headbtns">
+      <button id="settingsBtn" aria-label="GitHub同期設定">&#9881;</button>
+      <button id="exportBtn" disabled>Excel</button>
+    </div>
   </div>
   <div class="searchWrap">
     <span>&#128269;</span>
     <input id="searchInput" placeholder="タイトル・著者・タグで検索">
   </div>
+  <p id="syncStatus"></p>
 </header>
 
 <main>
@@ -147,6 +175,7 @@
         <label><span>出版年</span><input id="fYear" placeholder="2024"></label>
       </div>
       <label><span>出典（誌名・出版社など）</span><input id="fSource"></label>
+      <label><span>アブストラクト</span><textarea id="fAbstract" rows="3" placeholder="論文の要旨をそのまま、または要約して貼り付け"></textarea></label>
       <div class="row2">
         <label><span>言語</span>
           <select id="fLanguage">
@@ -160,12 +189,44 @@
       </div>
       <label><span>タグ（カンマ区切り）</span><input id="fTags" placeholder="kin-state, 論文3"></label>
       <label><span>読了日</span><input id="fDateRead" type="date"></label>
-      <label><span>メモ・要約</span><textarea id="fNotes" rows="4" placeholder="要点、引用箇所、自分の論文との関連など"></textarea></label>
+      <label><span>メモ・要約</span><textarea id="fNotes" rows="4" placeholder="要点、自分の論文との関連など"></textarea></label>
+
+      <div class="citeHead">
+        <span>引用メモ</span>
+        <button type="button" id="addCitationBtn">+ 引用を追加</button>
+      </div>
+      <div id="citationsList"></div>
+
       <p id="formError" style="display:none;"></p>
       <div class="formbtns">
         <button id="cancelBtn">キャンセル</button>
         <button id="saveBtn">保存</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="settingsOverlay">
+  <div id="settingsSheet">
+    <div class="sheethead">
+      <h2 class="serif">GitHub同期設定</h2>
+      <button id="settingsCloseBtn">&times;</button>
+    </div>
+    <div class="formbody">
+      <p style="color:var(--muted);font-size:12px;margin:0 0 14px;line-height:1.6;">
+        このリポジトリ内に文献データを自動でバックアップします。他の端末でも同じ設定を入力すれば同じデータにアクセスできます。
+      </p>
+      <label><span>GitHubユーザー名</span><input id="ghOwner" placeholder="例: higashi-cpu"></label>
+      <label><span>リポジトリ名</span><input id="ghRepo" placeholder="例: Reading-list"></label>
+      <label><span>Personal Access Token</span><input id="ghToken" type="password" placeholder="github_pat_..."></label>
+      <p id="ghError" style="display:none;color:var(--stamp);font-size:12px;margin:0 0 8px;"></p>
+      <div class="formbtns">
+        <button id="ghRestoreBtn" style="background:#E3D8B8;color:var(--ink-text);">GitHubから復元</button>
+        <button id="ghSaveBtn" style="background:var(--brass);color:var(--ink);">保存して同期</button>
+      </div>
+      <p style="color:#8B93A6;font-size:11px;margin-top:14px;line-height:1.6;">
+        Tokenは GitHub の Settings → Developer settings → Personal access tokens → Fine-grained tokens で、対象リポジトリを選び「Contents: Read and write」権限を付けて発行してください。
+      </p>
     </div>
   </div>
 </div>
@@ -200,8 +261,95 @@ const PIN = '593187'; // ← このPINを変えたい場合はここの数字を
 })();
 
 const STORAGE_KEY = 'literature-entries-v1';
+const GH_PATH = 'data/entries.json';
 let entries = [];
 let editingId = null;
+
+function ghConfig(){
+  try{ const raw = localStorage.getItem('gh-config'); return raw ? JSON.parse(raw) : null; }
+  catch(e){ return null; }
+}
+function ghSaveConfig(cfg){ localStorage.setItem('gh-config', JSON.stringify(cfg)); }
+
+function utf8ToBase64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function base64ToUtf8(b64){
+  const bin = atob(b64.replace(/\n/g, ''));
+  const bytes = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function setSyncStatus(msg){
+  const el = document.getElementById('syncStatus');
+  if(el) el.textContent = msg;
+}
+
+async function ghGetFile(){
+  const cfg = ghConfig();
+  if(!cfg) return null;
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${GH_PATH}`;
+  const res = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' }
+  });
+  if(res.status === 404) return { sha: null, data: [] };
+  if(!res.ok) throw new Error('GitHub取得エラー: ' + res.status);
+  const json = await res.json();
+  const data = JSON.parse(base64ToUtf8(json.content));
+  return { sha: json.sha, data };
+}
+
+async function ghPutFile(dataArr, sha){
+  const cfg = ghConfig();
+  if(!cfg) return;
+  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${GH_PATH}`;
+  const body = {
+    message: `文献目録を更新 (${new Date().toISOString()})`,
+    content: utf8ToBase64(JSON.stringify(dataArr, null, 2)),
+  };
+  if(sha) body.sha = sha;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${cfg.token}`, 'Accept': 'application/vnd.github+json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok){ const t = await res.text(); throw new Error('GitHub保存エラー: ' + res.status + ' ' + t); }
+}
+
+async function syncToGitHub(){
+  const cfg = ghConfig();
+  if(!cfg) return;
+  try{
+    setSyncStatus('GitHubに同期中…');
+    const current = await ghGetFile();
+    await ghPutFile(entries, current ? current.sha : null);
+    const now = new Date();
+    setSyncStatus(`最終同期: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`);
+  }catch(e){
+    setSyncStatus('同期エラー(設定を確認してください)');
+  }
+}
+
+async function restoreFromGitHub(silent){
+  const cfg = ghConfig();
+  if(!cfg) return;
+  try{
+    if(!silent) setSyncStatus('GitHubから読み込み中…');
+    const result = await ghGetFile();
+    if(result && result.data){
+      entries = result.data;
+      saveEntries();
+      render();
+      const now = new Date();
+      setSyncStatus(`GitHubから復元しました (${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')})`);
+    }
+  }catch(e){
+    if(!silent) setSyncStatus('復元エラー(設定を確認してください)');
+  }
+}
 
 function loadEntries(){
   try{ const raw = localStorage.getItem(STORAGE_KEY); entries = raw ? JSON.parse(raw) : []; }
@@ -213,7 +361,7 @@ function saveEntries(){
 }
 function emptyForm(){
   return {title:'',author:'',year:'',source:'',language:'日本語',sourceType:'二次資料',
-          tags:'',dateRead:new Date().toISOString().slice(0,10),notes:''};
+          tags:'',dateRead:new Date().toISOString().slice(0,10),notes:'',abstract:'',citations:[]};
 }
 function fmtStamp(d){ if(!d) return ''; const [y,m,dd]=d.split('-'); return `${y}.${m}.${dd}`; }
 function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -252,6 +400,14 @@ function render(){
           ${tags}
         </div>
         ${e.notes ? `<p class="notes">${esc(e.notes)}</p>` : ''}
+        ${e.abstract ? `<p class="abstract">${esc(e.abstract)}</p>` : ''}
+        ${(e.citations && e.citations.length) ? `<div class="citeBlock">
+          <h4>引用メモ (${e.citations.length})</h4>
+          ${e.citations.map(c => `<div class="citeItem">
+            <p class="q">${esc(c.quote)}</p>
+            ${(c.page || c.note) ? `<p class="p">${c.page ? 'p.'+esc(c.page) : ''}${(c.page && c.note) ? ' ・ ' : ''}${c.note ? esc(c.note) : ''}</p>` : ''}
+          </div>`).join('')}
+        </div>` : ''}
         <div class="actions">
           <button class="edit" onclick="openEdit('${e.id}')">&#9998; 編集</button>
           <button class="del" onclick="handleDelete('${e.id}')">&#128465; 削除</button>
@@ -275,17 +431,56 @@ function openEdit(id){
   document.getElementById('formTitle').textContent = '文献を編集';
   showForm();
 }
+let formCitations = [];
+
+function renderCitations(){
+  const wrap = document.getElementById('citationsList');
+  if(formCitations.length === 0){
+    wrap.innerHTML = `<p style="color:#8B93A6;font-size:11px;margin:0 0 10px;">まだありません</p>`;
+    return;
+  }
+  wrap.innerHTML = formCitations.map((c,i) => `
+    <div class="citeRow" data-id="${c.id}">
+      <button type="button" class="citeRemove" data-remove="${c.id}">&times; 削除</button>
+      <label><span>引用文 ${i+1}</span><textarea rows="2" data-field="quote" data-id="${c.id}" placeholder="引用箇所をそのまま貼り付け">${esc(c.quote)}</textarea></label>
+      <div class="row2">
+        <label><span>ページ</span><input data-field="page" data-id="${c.id}" value="${esc(c.page)}" placeholder="p.12"></label>
+        <label><span>用途メモ</span><input data-field="note" data-id="${c.id}" value="${esc(c.note)}" placeholder="論文1の第2節で使う等"></label>
+      </div>
+    </div>`).join('');
+
+  wrap.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', () => {
+      const c = formCitations.find(x => x.id === el.dataset.id);
+      if(c) c[el.dataset.field] = el.value;
+    });
+  });
+  wrap.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      formCitations = formCitations.filter(c => c.id !== btn.dataset.remove);
+      renderCitations();
+    });
+  });
+}
+function addCitation(){
+  formCitations.push({ id: `c${Date.now()}${Math.random().toString(36).slice(2,6)}`, quote:'', page:'', note:'' });
+  renderCitations();
+}
+
 function fillForm(f){
   document.getElementById('fTitle').value = f.title;
   document.getElementById('fAuthor').value = f.author;
   document.getElementById('fYear').value = f.year;
   document.getElementById('fSource').value = f.source;
+  document.getElementById('fAbstract').value = f.abstract || '';
   document.getElementById('fLanguage').value = f.language;
   document.getElementById('fSourceType').value = f.sourceType;
   document.getElementById('fTags').value = f.tags;
   document.getElementById('fDateRead').value = f.dateRead;
   document.getElementById('fNotes').value = f.notes;
   document.getElementById('formError').style.display = 'none';
+  formCitations = (f.citations || []).map(c => ({...c}));
+  renderCitations();
 }
 function showForm(){ document.getElementById('overlay').classList.add('show'); }
 function closeForm(){ document.getElementById('overlay').classList.remove('show'); }
@@ -302,11 +497,15 @@ function handleSave(){
     title, author: document.getElementById('fAuthor').value.trim(),
     year: document.getElementById('fYear').value.trim(),
     source: document.getElementById('fSource').value.trim(),
+    abstract: document.getElementById('fAbstract').value.trim(),
     language: document.getElementById('fLanguage').value,
     sourceType: document.getElementById('fSourceType').value,
     tags: document.getElementById('fTags').value.trim(),
     dateRead: document.getElementById('fDateRead').value,
     notes: document.getElementById('fNotes').value.trim(),
+    citations: formCitations
+      .filter(c => c.quote.trim() || c.page.trim() || c.note.trim())
+      .map(c => ({...c, quote:c.quote.trim(), page:c.page.trim(), note:c.note.trim()})),
   };
   if(editingId){
     entries = entries.map(e => e.id === editingId ? {...form, id:editingId, no:e.no} : e);
@@ -317,6 +516,7 @@ function handleSave(){
   saveEntries();
   closeForm();
   render();
+  syncToGitHub();
 }
 
 function handleDelete(id){
@@ -324,22 +524,26 @@ function handleDelete(id){
   entries = entries.filter(e => e.id !== id);
   saveEntries();
   render();
+  syncToGitHub();
 }
 
 function handleExport(){
   if(entries.length === 0) return;
   const rows = entries.slice().sort((a,b)=>(a.no||0)-(b.no||0)).map(e => ({
     'No.': e.no, 'タイトル': e.title, '著者': e.author, '出版年': e.year, '出典': e.source,
-    '言語': e.language, '種別': e.sourceType, 'タグ': e.tags, '読了日': e.dateRead, 'メモ': e.notes
+    'アブストラクト': e.abstract || '',
+    '言語': e.language, '種別': e.sourceType, 'タグ': e.tags, '読了日': e.dateRead, 'メモ': e.notes,
+    '引用メモ': (e.citations || []).map(c => `${c.page ? '['+c.page+'] ' : ''}${c.quote}${c.note ? ' ('+c.note+')' : ''}`).join('\n')
   }));
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:10},{wch:10},{wch:22},{wch:12},{wch:45}];
+  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:36},{wch:10},{wch:10},{wch:22},{wch:12},{wch:36},{wch:40}];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, '文献目録');
   XLSX.writeFile(wb, `文献目録_${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
 document.getElementById('addBtn').onclick = openAdd;
+document.getElementById('addCitationBtn').onclick = addCitation;
 document.getElementById('closeBtn').onclick = closeForm;
 document.getElementById('cancelBtn').onclick = closeForm;
 document.getElementById('saveBtn').onclick = handleSave;
@@ -347,8 +551,57 @@ document.getElementById('exportBtn').onclick = handleExport;
 document.getElementById('overlay').onclick = (ev) => { if(ev.target.id === 'overlay') closeForm(); };
 document.getElementById('searchInput').oninput = render;
 
+function openSettings(){
+  const cfg = ghConfig() || {};
+  document.getElementById('ghOwner').value = cfg.owner || '';
+  document.getElementById('ghRepo').value = cfg.repo || '';
+  document.getElementById('ghToken').value = cfg.token || '';
+  document.getElementById('ghError').style.display = 'none';
+  document.getElementById('settingsOverlay').classList.add('show');
+}
+function closeSettings(){ document.getElementById('settingsOverlay').classList.remove('show'); }
+
+document.getElementById('settingsBtn').onclick = openSettings;
+document.getElementById('settingsCloseBtn').onclick = closeSettings;
+document.getElementById('settingsOverlay').onclick = (ev) => { if(ev.target.id === 'settingsOverlay') closeSettings(); };
+
+document.getElementById('ghSaveBtn').onclick = async () => {
+  const owner = document.getElementById('ghOwner').value.trim();
+  const repo = document.getElementById('ghRepo').value.trim();
+  const token = document.getElementById('ghToken').value.trim();
+  const err = document.getElementById('ghError');
+  if(!owner || !repo || !token){
+    err.textContent = '3項目すべて入力してください';
+    err.style.display = 'block';
+    return;
+  }
+  ghSaveConfig({owner, repo, token});
+  err.style.display = 'none';
+  closeSettings();
+  await syncToGitHub();
+};
+
+document.getElementById('ghRestoreBtn').onclick = async () => {
+  const owner = document.getElementById('ghOwner').value.trim();
+  const repo = document.getElementById('ghRepo').value.trim();
+  const token = document.getElementById('ghToken').value.trim();
+  const err = document.getElementById('ghError');
+  if(!owner || !repo || !token){
+    err.textContent = '3項目すべて入力してください';
+    err.style.display = 'block';
+    return;
+  }
+  ghSaveConfig({owner, repo, token});
+  if(!confirm('この端末に保存されているデータを、GitHub上のデータで上書きします。よろしいですか?')) return;
+  closeSettings();
+  await restoreFromGitHub(false);
+};
+
 loadEntries();
 render();
+if(ghConfig() && entries.length === 0){
+  restoreFromGitHub(true);
+}
 </script>
 </body>
 </html>
