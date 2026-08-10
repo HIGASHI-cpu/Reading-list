@@ -41,6 +41,11 @@
                background:var(--ink-light);color:var(--cream);font-size:14px;}
 
   main{padding:16px;max-width:640px;margin:0 auto;}
+  .groupHead{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 10px;
+             padding-bottom:6px;border-bottom:1px solid var(--brass-dark);}
+  .groupHead:first-child{margin-top:0;}
+  .groupHead span:first-child{font-family:Georgia,serif;color:var(--brass);font-size:14px;letter-spacing:.05em;}
+  .groupCount{color:#8B93A6;font-size:11px;font-family:ui-monospace,"SF Mono",monospace;}
   .empty{text-align:center;padding:60px 20px;color:var(--cream);}
   .empty .icon{font-size:30px;opacity:.6;}
   .empty p{font-size:13px;margin-top:10px;}
@@ -113,6 +118,23 @@
   .citeItem .q{color:#241F18;font-size:12px;line-height:1.6;white-space:pre-wrap;}
   .citeItem .p{color:var(--muted);font-size:10px;margin-top:2px;}
   .citeItem .n{color:#5C5142;font-size:11px;margin-top:2px;}
+
+  .imgStrip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .cardThumb{width:64px;height:64px;object-fit:cover;border-radius:3px;border:1px solid var(--paper-line);}
+  #imageViewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:30;
+               align-items:center;justify-content:center;padding:24px;}
+  #imageViewer.show{display:flex;}
+  #imageViewer img{max-width:100%;max-height:100%;border-radius:4px;}
+
+  .imgHead{display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px;}
+  .imgHead span{font-size:12px;color:var(--muted);font-weight:600;}
+  #addImageBtn{width:auto;background:none;border:1px solid var(--brass-dark);color:var(--brass-dark);
+               padding:5px 10px;border-radius:3px;font-size:11px;font-weight:600;}
+  #imagesList{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+  .thumbWrap{position:relative;width:72px;height:72px;}
+  .thumbWrap img{width:100%;height:100%;object-fit:cover;border-radius:3px;border:1px solid var(--paper-line);}
+  .thumbRemove{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;
+               background:var(--stamp);color:var(--cream);border:none;font-size:12px;line-height:1;padding:0;}
 
   #lockScreen{position:fixed;inset:0;background:var(--ink);z-index:50;display:flex;flex-direction:column;
               align-items:center;justify-content:center;padding:24px;}
@@ -197,6 +219,13 @@
       </div>
       <div id="citationsList"></div>
 
+      <div class="imgHead">
+        <span>写真メモ</span>
+        <button type="button" id="addImageBtn">+ 画像を追加</button>
+      </div>
+      <input type="file" id="imageInput" accept="image/*" multiple style="display:none">
+      <div id="imagesList"></div>
+
       <p id="formError" style="display:none;"></p>
       <div class="formbtns">
         <button id="cancelBtn">キャンセル</button>
@@ -230,6 +259,10 @@
     </div>
   </div>
 </div>
+</div>
+
+<div id="imageViewer">
+  <img id="imageViewerImg" src="">
 </div>
 
 <script>
@@ -366,29 +399,10 @@ function emptyForm(){
 function fmtStamp(d){ if(!d) return ''; const [y,m,dd]=d.split('-'); return `${y}.${m}.${dd}`; }
 function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-function render(){
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const filtered = entries
-    .filter(e => !q || [e.title,e.author,e.tags,e.source].join(' ').toLowerCase().includes(q))
-    .sort((a,b) => (b.dateRead||'').localeCompare(a.dateRead||''));
-
-  document.getElementById('countLabel').textContent = entries.length;
-  document.getElementById('exportBtn').disabled = entries.length === 0;
-
-  const list = document.getElementById('list');
-  if(filtered.length === 0){
-    list.innerHTML = `<div class="empty">
-      <div class="icon">&#128214;</div>
-      <p>${entries.length===0 ? 'まだ文献が登録されていません。' : '該当する文献が見つかりません。'}</p>
-      ${entries.length===0 ? '<p class="hint">右下の + から読んだ論文を追加してください</p>' : ''}
-    </div>`;
-    return;
-  }
-
-  list.innerHTML = filtered.map(e => {
-    const tags = (e.tags||'').split(',').map(t=>t.trim()).filter(Boolean)
-      .map(t => `<span class="badge tag">#${esc(t)}</span>`).join('');
-    return `<div class="card">
+function cardHtml(e){
+  const tags = (e.tags||'').split(',').map(t=>t.trim()).filter(Boolean)
+    .map(t => `<span class="badge tag">#${esc(t)}</span>`).join('');
+  return `<div class="card">
       <div class="tab mono">識-${String(e.no).padStart(3,'0')}</div>
       ${e.dateRead ? `<div class="stamp mono">READ<br>${fmtStamp(e.dateRead)}</div>` : ''}
       <div class="cardbody">
@@ -408,13 +422,45 @@ function render(){
             ${(c.page || c.note) ? `<p class="p">${c.page ? 'p.'+esc(c.page) : ''}${(c.page && c.note) ? ' ・ ' : ''}${c.note ? esc(c.note) : ''}</p>` : ''}
           </div>`).join('')}
         </div>` : ''}
+        ${(e.images && e.images.length) ? `<div class="imgStrip">
+          ${e.images.map(img => `<img src="${img.dataUrl}" class="cardThumb" onclick="viewImage(this.src)">`).join('')}
+        </div>` : ''}
         <div class="actions">
           <button class="edit" onclick="openEdit('${e.id}')">&#9998; 編集</button>
           <button class="del" onclick="handleDelete('${e.id}')">&#128465; 削除</button>
         </div>
       </div>
     </div>`;
-  }).join('');
+}
+
+function render(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const filtered = entries
+    .filter(e => !q || [e.title,e.author,e.tags,e.source].join(' ').toLowerCase().includes(q))
+    .sort((a,b) => (b.dateRead||'').localeCompare(a.dateRead||''));
+
+  document.getElementById('countLabel').textContent = entries.length;
+  document.getElementById('exportBtn').disabled = entries.length === 0;
+
+  const list = document.getElementById('list');
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty">
+      <div class="icon">&#128214;</div>
+      <p>${entries.length===0 ? 'まだ文献が登録されていません。' : '該当する文献が見つかりません。'}</p>
+      ${entries.length===0 ? '<p class="hint">右下の + から読んだ論文を追加してください</p>' : ''}
+    </div>`;
+    return;
+  }
+
+  const groups = [
+    { label: '一次資料', items: filtered.filter(e => e.sourceType === '一次資料') },
+    { label: '二次資料', items: filtered.filter(e => e.sourceType === '二次資料') },
+  ];
+
+  list.innerHTML = groups.filter(g => g.items.length).map(g => `
+    <div class="groupHead"><span>${g.label}</span><span class="groupCount">${g.items.length}</span></div>
+    ${g.items.map(cardHtml).join('')}
+  `).join('');
 }
 
 function openAdd(){
@@ -467,6 +513,65 @@ function addCitation(){
   renderCitations();
 }
 
+let formImages = [];
+
+function resizeImage(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 1200;
+        let { width, height } = img;
+        if(width > maxDim || height > maxDim){
+          if(width > height){ height = Math.round(height * maxDim / width); width = maxDim; }
+          else { width = Math.round(width * maxDim / height); height = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderImageThumbs(){
+  const wrap = document.getElementById('imagesList');
+  wrap.innerHTML = formImages.map(img => `
+    <div class="thumbWrap" data-id="${img.id}">
+      <img src="${img.dataUrl}">
+      <button type="button" class="thumbRemove" data-remove-img="${img.id}">&times;</button>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-remove-img]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      formImages = formImages.filter(i => i.id !== btn.dataset.removeImg);
+      renderImageThumbs();
+    });
+  });
+}
+
+async function handleImageSelect(fileList){
+  const files = Array.from(fileList);
+  for(const file of files){
+    try{
+      const dataUrl = await resizeImage(file);
+      formImages.push({ id: `img${Date.now()}${Math.random().toString(36).slice(2,6)}`, dataUrl });
+    }catch(e){ /* skip file that failed to process */ }
+  }
+  renderImageThumbs();
+  document.getElementById('imageInput').value = '';
+}
+
+function viewImage(src){
+  document.getElementById('imageViewerImg').src = src;
+  document.getElementById('imageViewer').classList.add('show');
+}
+
 function fillForm(f){
   document.getElementById('fTitle').value = f.title;
   document.getElementById('fAuthor').value = f.author;
@@ -481,6 +586,8 @@ function fillForm(f){
   document.getElementById('formError').style.display = 'none';
   formCitations = (f.citations || []).map(c => ({...c}));
   renderCitations();
+  formImages = (f.images || []).map(i => ({...i}));
+  renderImageThumbs();
 }
 function showForm(){ document.getElementById('overlay').classList.add('show'); }
 function closeForm(){ document.getElementById('overlay').classList.remove('show'); }
@@ -506,6 +613,7 @@ function handleSave(){
     citations: formCitations
       .filter(c => c.quote.trim() || c.page.trim() || c.note.trim())
       .map(c => ({...c, quote:c.quote.trim(), page:c.page.trim(), note:c.note.trim()})),
+    images: formImages,
   };
   if(editingId){
     entries = entries.map(e => e.id === editingId ? {...form, id:editingId, no:e.no} : e);
@@ -533,10 +641,11 @@ function handleExport(){
     'No.': e.no, 'タイトル': e.title, '著者': e.author, '出版年': e.year, '出典': e.source,
     'アブストラクト': e.abstract || '',
     '言語': e.language, '種別': e.sourceType, 'タグ': e.tags, '読了日': e.dateRead, 'メモ': e.notes,
-    '引用メモ': (e.citations || []).map(c => `${c.page ? '['+c.page+'] ' : ''}${c.quote}${c.note ? ' ('+c.note+')' : ''}`).join('\n')
+    '引用メモ': (e.citations || []).map(c => `${c.page ? '['+c.page+'] ' : ''}${c.quote}${c.note ? ' ('+c.note+')' : ''}`).join('\n'),
+    '画像': (e.images && e.images.length) ? `${e.images.length}枚(Excelには添付されません)` : ''
   }));
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:36},{wch:10},{wch:10},{wch:22},{wch:12},{wch:36},{wch:40}];
+  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:36},{wch:10},{wch:10},{wch:22},{wch:12},{wch:36},{wch:40},{wch:24}];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, '文献目録');
   XLSX.writeFile(wb, `文献目録_${new Date().toISOString().slice(0,10)}.xlsx`);
@@ -544,6 +653,9 @@ function handleExport(){
 
 document.getElementById('addBtn').onclick = openAdd;
 document.getElementById('addCitationBtn').onclick = addCitation;
+document.getElementById('addImageBtn').onclick = () => document.getElementById('imageInput').click();
+document.getElementById('imageInput').addEventListener('change', (e) => handleImageSelect(e.target.files));
+document.getElementById('imageViewer').onclick = () => document.getElementById('imageViewer').classList.remove('show');
 document.getElementById('closeBtn').onclick = closeForm;
 document.getElementById('cancelBtn').onclick = closeForm;
 document.getElementById('saveBtn').onclick = handleSave;
