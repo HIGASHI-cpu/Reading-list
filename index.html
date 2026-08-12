@@ -115,6 +115,8 @@
 
   .abstract{color:#3A3226;font-size:12px;margin-top:8px;line-height:1.6;font-style:italic;
             border-left:2px solid var(--brass-dark);padding-left:8px;}
+  .pdfLink{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:11px;font-weight:600;
+           color:var(--teal);text-decoration:none;border:1px solid var(--teal);padding:5px 10px;border-radius:3px;}
   .citeBlock{margin-top:10px;padding-top:8px;border-top:1px dashed var(--paper-line);}
   .citeBlock h4{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
   .citeItem{border-left:2px solid var(--teal);padding:2px 0 2px 8px;margin-bottom:8px;}
@@ -201,6 +203,7 @@
       </div>
       <label><span>出典（誌名・出版社など）</span><input id="fSource"></label>
       <label><span>アブストラクト</span><textarea id="fAbstract" rows="3" placeholder="論文の要旨をそのまま、または要約して貼り付け"></textarea></label>
+      <label><span>PDFリンク(Google Driveなど)</span><input id="fPdfLink" type="url" placeholder="https://drive.google.com/..."></label>
       <div class="row2">
         <label><span>言語</span>
           <select id="fLanguage">
@@ -361,6 +364,10 @@ async function syncToGitHub(){
   try{
     setSyncStatus('GitHubに同期中…');
     const current = await ghGetFile();
+    if(current && current.data && current.data.length > 0 && entries.length === 0){
+      setSyncStatus('⚠ ローカルが空のため同期を中止しました(GitHub上のデータを保護)');
+      return;
+    }
     await ghPutFile(entries, current ? current.sha : null);
     const now = new Date();
     setSyncStatus(`最終同期: ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`);
@@ -397,7 +404,7 @@ function saveEntries(){
 }
 function emptyForm(){
   return {title:'',author:'',year:'',source:'',language:'日本語',sourceType:'二次資料',
-          tags:'',dateRead:new Date().toISOString().slice(0,10),notes:'',abstract:'',citations:[]};
+          tags:'',dateRead:new Date().toISOString().slice(0,10),notes:'',abstract:'',pdfLink:'',citations:[]};
 }
 function fmtStamp(d){ if(!d) return ''; const [y,m,dd]=d.split('-'); return `${y}.${m}.${dd}`; }
 function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -418,6 +425,7 @@ function cardHtml(e){
         </div>
         ${e.notes ? `<p class="notes">${esc(e.notes)}</p>` : ''}
         ${e.abstract ? `<p class="abstract">${esc(e.abstract)}</p>` : ''}
+        ${e.pdfLink ? `<a class="pdfLink" href="${esc(e.pdfLink)}" target="_blank" rel="noopener">&#128196; PDFを開く</a>` : ''}
         ${(e.citations && e.citations.length) ? `<div class="citeBlock">
           <h4>引用メモ (${e.citations.length})</h4>
           ${e.citations.map(c => `<div class="citeItem">
@@ -581,6 +589,7 @@ function fillForm(f){
   document.getElementById('fYear').value = f.year;
   document.getElementById('fSource').value = f.source;
   document.getElementById('fAbstract').value = f.abstract || '';
+  document.getElementById('fPdfLink').value = f.pdfLink || '';
   document.getElementById('fLanguage').value = f.language;
   document.getElementById('fSourceType').value = f.sourceType;
   document.getElementById('fTags').value = f.tags;
@@ -608,6 +617,7 @@ function handleSave(){
     year: document.getElementById('fYear').value.trim(),
     source: document.getElementById('fSource').value.trim(),
     abstract: document.getElementById('fAbstract').value.trim(),
+    pdfLink: document.getElementById('fPdfLink').value.trim(),
     language: document.getElementById('fLanguage').value,
     sourceType: document.getElementById('fSourceType').value,
     tags: document.getElementById('fTags').value.trim(),
@@ -643,12 +653,13 @@ function handleExport(){
   const rows = entries.slice().sort((a,b)=>(a.no||0)-(b.no||0)).map(e => ({
     'No.': e.no, 'タイトル': e.title, '著者': e.author, '出版年': e.year, '出典': e.source,
     'アブストラクト': e.abstract || '',
+    'PDFリンク': e.pdfLink || '',
     '言語': e.language, '種別': e.sourceType, 'タグ': e.tags, '読了日': e.dateRead, 'メモ': e.notes,
     '引用メモ': (e.citations || []).map(c => `${c.page ? '['+c.page+'] ' : ''}${c.quote}${c.note ? ' ('+c.note+')' : ''}`).join('\n'),
     '画像': (e.images && e.images.length) ? `${e.images.length}枚(Excelには添付されません)` : ''
   }));
   const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:36},{wch:10},{wch:10},{wch:22},{wch:12},{wch:36},{wch:40},{wch:24}];
+  ws['!cols'] = [{wch:5},{wch:32},{wch:16},{wch:8},{wch:22},{wch:36},{wch:30},{wch:10},{wch:10},{wch:22},{wch:12},{wch:36},{wch:40},{wch:24}];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, '文献目録');
   XLSX.writeFile(wb, `文献目録_${new Date().toISOString().slice(0,10)}.xlsx`);
