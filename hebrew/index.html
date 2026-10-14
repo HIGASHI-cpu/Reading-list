@@ -53,7 +53,7 @@
   .brand small{color:var(--muted);font-size:.78rem;letter-spacing:.06em}
 
   nav.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px}
-  nav.tabs button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:.88rem;color:var(--muted);font-weight:500}
+  nav.tabs button{border:0;background:transparent;padding:6px 12px;border-radius:999px;font-size:.88rem;color:var(--muted);font-weight:500}
   nav.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
 
   .units{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
@@ -106,6 +106,18 @@
   .done{padding:32px 16px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
   .done .he{font-size:2.4rem}
 
+  /* recite */
+  .sent-ja{font-size:clamp(1.15rem,5vw,1.45rem);font-weight:700;line-height:1.5}
+  .sent-he{font-size:clamp(1.6rem,6.5vw,2.2rem);line-height:1.7;display:flex;flex-wrap:wrap;justify-content:center;gap:.1em .32em}
+  .tok{font:inherit;color:inherit;background:none;border:0;padding:0}
+  .tok.hid{color:var(--accent);border-bottom:2px solid var(--accent);cursor:pointer;min-height:1.2em}
+  .tok.hid .dash{color:var(--muted);font-family:var(--font-ui);font-size:.6em}
+  .translit{font-size:.9rem;color:var(--muted);letter-spacing:.02em;direction:ltr}
+  .tools{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .sent-row{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;text-align:left;width:100%}
+  .sent-row .he{font-size:1.25rem;text-align:right;line-height:1.5}
+  .sent-row small{color:var(--muted)}
+
   /* quiz */
   .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .choices button{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:12px 10px;min-height:64px;
@@ -145,6 +157,8 @@
   .dirbar{flex-wrap:nowrap}
   .dirbar button{flex:2 1 0;font-size:.78rem;padding:9px 2px;white-space:nowrap}
   .dirbar button:last-child{flex:1 1 0}
+  .stagebar{flex-wrap:nowrap}
+  .stagebar button{flex:1 1 0;font-size:.78rem;padding:9px 2px;white-space:nowrap}
   .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
   textarea{width:100%;min-height:90px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--r);padding:8px;font:12px/1.4 ui-monospace,monospace}
   .note{font-size:.8rem;color:var(--muted)}
@@ -169,6 +183,7 @@
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="study" aria-selected="true">学習</button>
       <button role="tab" data-tab="quiz" aria-selected="false">クイズ</button>
+      <button role="tab" data-tab="recite" aria-selected="false">暗唱</button>
       <button role="tab" data-tab="list" aria-selected="false">一覧</button>
       <button role="tab" data-tab="settings" aria-selected="false">設定</button>
     </nav>
@@ -181,6 +196,7 @@
 <div class="toast" id="toast" hidden></div>
 
 <script src="vocab.js"></script>
+<script src="sentences.js"></script>
 <script>
 (() => {
   "use strict";
@@ -205,13 +221,22 @@
     return { ...u, words };
   });
   const ALL = UNITS.flatMap(u => u.words);
+  const SENTS = (window.SENTENCE_UNITS || []).flatMap(su => {
+    const unit = UNITS.find(x => x.id === su.id) || { id: su.id, title: su.id, page: "" };
+    return su.text.split("\n").map(l => l.trim()).filter(Boolean).map(l => {
+      const [he, tr = "", ja = ""] = l.split("|").map(x => x.trim());
+      return { id: "s:" + unit.id + ":" + he, he, tr, ja, unit };
+    });
+  });
 
   // ---------- state ----------
   const defaults = { prog: {}, sel: UNITS.map(u => u.id),
-    set: { dir: "he", niqqud: true, lang: "both", newPer: 15, autoSpeak: false, rate: 0.85 } };
+    sprog: {},
+    set: { dir: "he", niqqud: true, lang: "both", newPer: 15, autoSpeak: false, rate: 0.85,
+           stage: "half", showTr: true, newSent: 5, listMode: "words" } };
   let S;
   try { S = JSON.parse(localStorage.getItem(KEY)) || defaults; } catch { S = defaults; }
-  S.set = { ...defaults.set, ...(S.set || {}) }; S.prog = S.prog || {}; S.sel = S.sel || defaults.sel;
+  S.set = { ...defaults.set, ...(S.set || {}) }; S.prog = S.prog || {}; S.sprog = S.sprog || {}; S.sel = S.sel || defaults.sel;
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
 
   const stripNiqqud = s => s.replace(/[֑-ׇֽֿׁׂׅׄ]/g, "");
@@ -233,10 +258,10 @@
     heVoice = speechSynthesis.getVoices().find(v => /^he|^iw/i.test(v.lang)) || null;
   }
   if ("speechSynthesis" in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-  function speak(text) {
+  function speak(text, rate) {
     if (!("speechSynthesis" in window)) { toast("この端末は音声読み上げに対応していません"); return; }
     const u = new SpeechSynthesisUtterance(text.replace(/\.\.\.|[()=+?!]|\s-\s?/g, " "));
-    u.lang = "he-IL"; if (heVoice) u.voice = heVoice; u.rate = S.set.rate;
+    u.lang = "he-IL"; if (heVoice) u.voice = heVoice; u.rate = rate || S.set.rate;
     speechSynthesis.cancel(); speechSynthesis.speak(u);
     if (!heVoice) toast("ヘブライ語の音声が見つかりません（端末の設定で追加できます）");
   }
@@ -254,17 +279,18 @@
     const id = b.dataset.unit;
     if (id === "*") S.sel = S.sel.length === UNITS.length ? [] : UNITS.map(u => u.id);
     else S.sel = S.sel.includes(id) ? S.sel.filter(x => x !== id) : [...S.sel, id];
-    save(); renderUnits(); session = null; quiz = null; render();
+    save(); renderUnits(); session = null; quiz = null; rs = null; render();
   });
 
   function renderStats() {
-    const p = pool(), now = Date.now();
-    const due = p.filter(w => S.prog[w.id] && S.prog[w.id].due <= now).length;
-    const fresh = p.filter(w => !S.prog[w.id]).length;
-    const mast = p.filter(w => lv(w) >= MASTERED).length;
+    const sent = tab === "recite" || (tab === "list" && S.set.listMode === "sents");
+    const p = sent ? spool() : pool(), M = sent ? S.sprog : S.prog, now = Date.now();
+    const due = p.filter(w => M[w.id] && M[w.id].due <= now).length;
+    const fresh = p.filter(w => !M[w.id]).length;
+    const mast = p.filter(w => M[w.id] && M[w.id].lv >= MASTERED).length;
     $("#stats").innerHTML = `<span class="due"><b class="num">${due}</b>復習待ち</span>
       <span><b class="num">${fresh}</b>未学習</span>
-      <span><b class="num">${mast}</b>/ ${p.length} 定着</span>`;
+      <span><b class="num">${mast}</b>/ ${p.length}${sent ? "文" : ""} 定着</span>`;
   }
 
   // ---------- tabs ----------
@@ -277,7 +303,7 @@
   });
   function render() {
     renderStats();
-    ({ study: renderStudy, quiz: renderQuiz, list: renderList, settings: renderSettings })[tab]();
+    ({ study: renderStudy, quiz: renderQuiz, recite: renderRecite, list: renderList, settings: renderSettings })[tab]();
   }
 
   // ---------- card pieces ----------
@@ -315,19 +341,28 @@
     queue.forEach(w => dir[w.id] = pickDir());
     session = { queue, dir, flipped: false, done: 0 };
   }
-  function grade(g) {
-    const w = session.queue[0]; if (!w) return;
+  // shared spaced-repetition step for words (S.prog) and sentences (S.sprog)
+  function srs(map, id, g) {
     const now = Date.now();
-    const p = S.prog[w.id] || { lv: 0, due: now, r: 0, w: 0 };
-    if (g === 1) { p.lv = 0; p.w++; p.due = now; session.queue.splice(Math.min(4, session.queue.length), 0, w); }
+    const p = map[id] || { lv: 0, due: now, r: 0, w: 0 };
+    if (g === 1) { p.lv = 0; p.w++; p.due = now; }
     else if (g === 2) { p.lv = Math.max(1, p.lv); p.r++; p.due = now + IV[p.lv] * DAY * .5; }
     else if (g === 3) { p.lv = Math.min(7, p.lv + 1); p.r++; p.due = now + IV[p.lv] * DAY; }
     else { p.lv = Math.min(7, p.lv + 2); p.r++; p.due = now + IV[p.lv] * DAY * 1.3; }
-    p.last = now; S.prog[w.id] = p; save();
+    p.last = now; map[id] = p; save();
+  }
+  function grade(g) {
+    const w = session.queue[0]; if (!w) return;
+    srs(S.prog, w.id, g);
+    if (g === 1) session.queue.splice(Math.min(4, session.queue.length), 0, w);
     session.queue.shift(); session.flipped = false;
     if (g !== 1) session.done++;
     render();
   }
+  const nextIvFor = (p, g) => { const l = p ? p.lv : 0;
+    if (g === 2) return fmtIv(IV[Math.max(1, l)] * .5);
+    if (g === 3) return fmtIv(IV[Math.min(7, l + 1)]);
+    return fmtIv(IV[Math.min(7, l + 2)] * 1.3); };
   const fmtIv = d => d < 1 ? "半日" : d < 30 ? `${Math.round(d)}日` : `${Math.round(d / 30)}か月`;
   function renderStudy() {
     if (!session) buildSession();
@@ -452,13 +487,106 @@
   }
   function nextQ() { quiz.i++; quiz.picked = null; render(); }
 
+  // ---------- recite (sentences) ----------
+  let rs = null;   // { queue:[sentence], flipped, shown:Set<word index>, done }
+  const spool = () => SENTS.filter(x => S.sel.includes(x.unit.id));
+  const STAGES = [["read", "全文"], ["half", "穴あき"], ["initial", "頭文字"], ["none", "日本語だけ"]];
+  function buildRecite() {
+    const p = spool(), now = Date.now();
+    const due = shuffle(p.filter(x => S.sprog[x.id] && S.sprog[x.id].due <= now));
+    const fresh = p.filter(x => !S.sprog[x.id]).slice(0, S.set.newSent);
+    rs = { queue: [...due, ...fresh], flipped: false, shown: new Set(), done: 0 };
+  }
+  // Hebrew line with words hidden according to the stage; hidden words reveal on tap
+  function sentHtml(x, stage) {
+    if (stage === "none" && !rs.flipped) return `<div class="hint">ヘブライ語で言ってみてから「答えを見る」</div>`;
+    const toks = x.he.split(/\s+/);
+    return `<div class="sent-he he" lang="he">${toks.map((t, i) => {
+      const hide = !rs.flipped && !rs.shown.has(i) && (stage === "initial" || (stage === "half" && i % 2 === 1));
+      if (!hide || !/[\u05D0-\u05EA]/.test(t)) return `<span class="tok">${esc(showHe(t))}</span>`;
+      const tail = (t.match(/[.,!?:;"]+$/) || [""])[0];
+      const body = t.slice(0, t.length - tail.length);
+      if (stage === "half") {
+        const n = body.replace(/[^\u05D0-\u05EA]/g, "").length;
+        return `<span><button class="tok hid" data-t="${i}" aria-label="隠れた語を表示" style="width:${Math.max(1.6, n * .62)}em"></button>${esc(tail)}</span>`;
+      }
+      let end = body.search(/[\u05D0-\u05EA]/) + 1;
+      while (end < body.length && /[\u0591-\u05C7]/.test(body[end])) end++;
+      return `<span><button class="tok hid" data-t="${i}" aria-label="隠れた語を表示">${esc(showHe(body.slice(0, end)))}<span class="dash">…</span></button>${esc(tail)}</span>`;
+    }).join(" ")}</div>`;
+  }
+  function gradeSent(g) {
+    const x = rs.queue[0]; if (!x) return;
+    srs(S.sprog, x.id, g);
+    if (g === 1) rs.queue.splice(Math.min(3, rs.queue.length), 0, x);
+    rs.queue.shift(); rs.flipped = false; rs.shown = new Set();
+    if (g !== 1) rs.done++;
+    render();
+  }
+  function renderRecite() {
+    if (!rs) buildRecite();
+    if (!spool().length) { view.innerHTML = `<div class="done"><p>選んだ課にはまだ例文がありません。上で課を選んでください。</p></div>`; return; }
+    const x = rs.queue[0];
+    if (!x) {
+      const fresh = spool().filter(y => !S.sprog[y.id]).length;
+      view.innerHTML = `<div class="done"><span class="he" lang="he">כׇּל הַכָּבוֹד!</span>
+        <p>今回の暗唱は終わりました（${rs.done}文）。</p>
+        <div class="row" style="width:100%">
+          ${fresh ? `<button class="primary" id="more">新しい文をあと ${Math.min(S.set.newSent, fresh)} 文</button>` : ""}
+          <button class="ghost" id="all">選んだ課の文をすべて練習する</button></div></div>`;
+      $("#more")?.addEventListener("click", () => { buildRecite(); render(); });
+      $("#all").addEventListener("click", () => { rs = { queue: shuffle(spool()), flipped: false, shown: new Set(), done: 0 }; render(); });
+      return;
+    }
+    const st = S.set.stage, f = rs.flipped, p = S.sprog[x.id];
+    const trOn = f || (st === "read" && S.set.showTr);
+    view.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px">
+      <div class="seg stagebar" role="group" aria-label="隠し方">${STAGES.map(([v, l]) => `<button data-stage="${v}" aria-pressed="${st === v}">${l}</button>`).join("")}</div>
+      <div class="qhead"><span>${p ? "復習" : "新しい文"}</span><span class="num">残り ${rs.queue.length}</span></div>
+      <div class="card" style="cursor:default;gap:14px">
+        <div class="sidetab"><span class="he" lang="he">${esc(x.unit.title)}</span><span class="num">p.${x.unit.page}</span></div>
+        <div class="sent-ja">${esc(x.ja)}</div>
+        ${sentHtml(x, st)}
+        ${trOn ? `<div class="translit">${esc(x.tr)}</div>` : ""}
+        <div class="tools">
+          <button class="speak" id="play">▶ 再生</button>
+          <button class="speak" id="slow">▶ ゆっくり</button>
+          ${!f && st !== "none" ? `<button class="speak" id="tr">${S.set.showTr && st === "read" ? "読みを隠す" : "読みを見る"}</button>` : ""}
+        </div>
+      </div>
+      ${f ? `<div class="grades">
+          <button class="again" data-sg="1">言えなかった<small>すぐ</small></button>
+          <button data-sg="2">あやしい<small>${nextIvFor(p, 2)}</small></button>
+          <button class="good" data-sg="3">言えた<small>${nextIvFor(p, 3)}</small></button>
+          <button data-sg="4">楽勝<small>${nextIvFor(p, 4)}</small></button></div>`
+        : `<button class="primary" id="reveal">答えを見る（全文）</button>`}
+      <div class="keys">${st === "read" ? "全文を見ながら音読 → 慣れたら「穴あき」「頭文字」「日本語だけ」へ" : "下線の語はタップで1語ずつ表示"} ・ Space で答え ・ P で再生 ・ 1〜4 で評価</div>
+    </div>`;
+    view.querySelectorAll("[data-t]").forEach(b => b.addEventListener("click", () => { rs.shown.add(+b.dataset.t); render(); }));
+    $("#play").addEventListener("click", () => speak(x.he));
+    $("#slow").addEventListener("click", () => speak(x.he, .55));
+    $("#tr")?.addEventListener("click", () => {
+      if (st === "read") { S.set.showTr = !S.set.showTr; save(); }
+      else { rs.shown = new Set(x.he.split(/\s+/).map((_, i) => i)); toast("読み：" + x.tr); }
+      render();
+    });
+    $("#reveal")?.addEventListener("click", () => { rs.flipped = true; if (S.set.autoSpeak) speak(x.he); render(); });
+    view.querySelectorAll("[data-sg]").forEach(b => b.addEventListener("click", () => gradeSent(+b.dataset.sg)));
+  }
+  view.addEventListener("click", e => {
+    const b = e.target.closest("[data-stage]"); if (!b) return;
+    S.set.stage = b.dataset.stage; save(); if (rs) rs.shown = new Set(); render();
+  });
+
   // ---------- list ----------
   let q = "";
   function renderList() {
+    if (S.set.listMode === "sents") return renderSentList();
     const qq = stripNiqqud(q.trim().toLowerCase());
     const match = w => !qq || stripNiqqud(w.he).includes(qq) || w.ja.toLowerCase().includes(qq) || w.en.toLowerCase().includes(qq);
     const units = UNITS.filter(u => S.sel.includes(u.id));
     let html = `<div style="display:flex;flex-direction:column;gap:14px">
+      ${listToggle()}
       <input class="search" id="search" type="search" placeholder="検索（ヘブライ語・日本語・English）" value="${esc(q)}">
       <div class="legend"><span><i class="dot"></i>未学習</span><span><i class="dot" style="background:var(--bad)"></i>覚えはじめ</span>
         <span><i class="dot" style="background:var(--gold)"></i>復習中</span><span><i class="dot" style="background:var(--good)"></i>定着</span>
@@ -484,6 +612,24 @@
     s.addEventListener("input", () => { q = s.value; const pos = s.selectionStart; renderList(); const n = $("#search"); n.focus(); n.setSelectionRange(pos, pos); });
     view.querySelectorAll("[data-say]").forEach(b => b.addEventListener("click", () => speak(b.dataset.say)));
   }
+  const listToggle = () => `<div class="seg" role="group" aria-label="表示">${[["words", "単語"], ["sents", "例文"]].map(([v, l]) =>
+    `<button data-lm="${v}" aria-pressed="${S.set.listMode === v}">${l}</button>`).join("")}</div>`;
+  view.addEventListener("click", e => {
+    const b = e.target.closest("[data-lm]"); if (!b) return;
+    S.set.listMode = b.dataset.lm; save(); render();
+  });
+  function renderSentList() {
+    let html = `<div style="display:flex;flex-direction:column;gap:14px">${listToggle()}
+      <div class="legend"><span>行をタップで発音</span></div>`;
+    UNITS.filter(u => S.sel.includes(u.id)).forEach(u => {
+      const xs = SENTS.filter(x => x.unit.id === u.id); if (!xs.length) return;
+      html += `<section class="unit-block"><div class="unit-head"><span class="he" lang="he">${esc(u.title)}</span><small class="num">${xs.length}文</small></div>
+        ${xs.map(x => `<button class="sent-row" data-say="${esc(x.he)}"><span class="he" lang="he">${esc(showHe(x.he))}</span>
+          <small>${esc(x.tr)}</small><span>${esc(x.ja)}</span></button>`).join("")}</section>`;
+    });
+    view.innerHTML = html + `</div>`;
+    view.querySelectorAll("[data-say]").forEach(b => b.addEventListener("click", () => speak(b.dataset.say)));
+  }
 
   // ---------- settings ----------
   let confirmReset = false;
@@ -497,6 +643,7 @@
       <div class="field"><span class="lbl">問題のニクダー（母音記号）</span>${seg("niqqud", [["true", "表示する"], ["false", "隠す（答えでは表示）"]])}</div>
       <div class="field"><span class="lbl">意味の表示</span>${seg("lang", [["both", "日本語＋English"], ["ja", "日本語"], ["en", "English"]])}</div>
       <div class="field"><span class="lbl">1回あたりの新しい単語</span>${seg("newPer", [[5, "5"], [10, "10"], [15, "15"], [25, "25"], [40, "40"]])}</div>
+      <div class="field"><span class="lbl">暗唱：1回あたりの新しい文</span>${seg("newSent", [[3, "3"], [5, "5"], [8, "8"], [12, "12"]])}</div>
       <div class="field"><span class="lbl">答えを見たら自動で発音</span>${seg("autoSpeak", [["false", "しない"], ["true", "する"]])}
         <span class="note">${heVoice ? `音声：${esc(heVoice.name)}` : "この端末ではヘブライ語の音声が見つかっていません。iPhone は「設定 → アクセシビリティ → 読み上げコンテンツ → 声」でヘブライ語を追加できます。"}</span></div>
       <div class="field"><span class="lbl">発音の速さ</span>${seg("rate", [[0.6, "ゆっくり"], [0.85, "ふつう"], [1, "速い"]])}</div>
@@ -506,15 +653,15 @@
         <div class="row"><button class="ghost" id="exp">今の記録を表示してコピー</button><button class="ghost" id="imp">貼り付けた記録を読み込む</button></div></div>
       <div class="field"><span class="lbl">リセット</span>
         <button class="ghost danger" id="reset">${confirmReset ? "本当に消す（もう一度押す）" : "学習記録をすべて消す"}</button></div>
-      <p class="note">収録：${UNITS.length}課・${ALL.length}語。単語データは vocab.js にあり、課を足すと自動で増えます。</p>
+      <p class="note">収録：${UNITS.length}課・${ALL.length}語・例文${SENTS.length}文。単語は vocab.js、例文は sentences.js にあり、足すと自動で増えます。</p>
     </div>`;
     view.querySelectorAll("[data-set]").forEach(b => b.addEventListener("click", () => {
       const k = b.dataset.set, v = b.dataset.v;
       S.set[k] = v === "true" ? true : v === "false" ? false : isNaN(+v) ? v : +v;
-      save(); session = null; quiz = null; render();
+      save(); session = null; quiz = null; rs = null; render();
     }));
     $("#exp").addEventListener("click", () => {
-      const t = $("#io"); t.value = JSON.stringify({ prog: S.prog, set: S.set, sel: S.sel });
+      const t = $("#io"); t.value = JSON.stringify({ prog: S.prog, sprog: S.sprog, set: S.set, sel: S.sel });
       navigator.clipboard?.writeText(t.value).then(() => toast("コピーしました"), () => { t.select(); toast("選択しました。コピーしてください"); })
         ?? (t.select(), toast("選択しました。コピーしてください"));
     });
@@ -522,13 +669,13 @@
       try {
         const d = JSON.parse($("#io").value);
         if (!d || typeof d.prog !== "object") throw 0;
-        S.prog = d.prog; if (d.set) S.set = { ...S.set, ...d.set }; if (Array.isArray(d.sel)) S.sel = d.sel;
+        S.prog = d.prog; S.sprog = d.sprog || S.sprog; if (d.set) S.set = { ...S.set, ...d.set }; if (Array.isArray(d.sel)) S.sel = d.sel;
         save(); session = null; quiz = null; renderUnits(); render(); toast("記録を読み込みました");
       } catch { toast("読み込めませんでした。コピーした文字列をそのまま貼り付けてください"); }
     });
     $("#reset").addEventListener("click", () => {
       if (!confirmReset) { confirmReset = true; renderSettings(); setTimeout(() => { confirmReset = false; if (tab === "settings") renderSettings(); }, 4000); return; }
-      confirmReset = false; S.prog = {}; save(); session = null; quiz = null; render(); toast("学習記録を消しました");
+      confirmReset = false; S.prog = {}; S.sprog = {}; save(); session = null; quiz = null; rs = null; render(); toast("学習記録を消しました");
     });
   }
 
@@ -538,6 +685,10 @@
     if (tab === "study" && session && session.queue[0]) {
       if ((e.key === " " || e.key === "Enter") && !session.flipped) { e.preventDefault(); $("#flip")?.click(); }
       else if (session.flipped && /^[1-4]$/.test(e.key)) grade(+e.key);
+    } else if (tab === "recite" && rs && rs.queue[0]) {
+      if ((e.key === " " || e.key === "Enter") && !rs.flipped) { e.preventDefault(); $("#reveal")?.click(); }
+      else if (rs.flipped && /^[1-4]$/.test(e.key)) gradeSent(+e.key);
+      else if (e.key === "p" || e.key === "P") speak(rs.queue[0].he);
     } else if (tab === "quiz" && quiz && quiz.qs[quiz.i]) {
       if (!quiz.picked && /^[1-4]$/.test(e.key)) { const o = quiz.qs[quiz.i].opts[+e.key - 1]; if (o) pick(o.id); }
       else if (quiz.picked && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); nextQ(); }
