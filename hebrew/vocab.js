@@ -774,4 +774,594 @@ window.VOCAB_UNITS = [
 כָּכָה כָּכָה | so so | まあまあ | adv
 ` },
 
+{ id: "s11", title: "שיעור 11", page: 255, text: `
+# 動詞
+מְפַקְסֵס, לְפַקְסֵס | fax | ファックスを送る
+עוֹבֵר, לַעֲבוֹר | pass | 通る、過ぎる
+שׁוֹלֵחַ, לִשְׁלוֹחַ | send | 送る
+# 名詞
+אֲגוֹרָה | agora (1/100 of a shekel) | アゴラ（1/100シェケル） | f
+אֱלוֹהִים | god | 神 | m pl
+בּוּל | stamp | 切手 | m
+בֵּית חוֹלִים | hospital | 病院 | m | בָּתֵּי חוֹלִים
+בַּקְבּוּק | bottle | 瓶 | m
+דּוֹאַר | mail / post | 郵便 | m nopl
+דּוֹאַר אֲוִויר | air mail | 航空便 | m nopl
+חֲבִילָה | package | 小包 | f
+יוֹם הוּלֶדֶת | birthday | 誕生日 | m
+כֶּלֶב, כַּלְבָּה | dog | 犬（雄／雌） | m,f
+מִבְרָק | telegram | 電報 | m
+מֶזֶג אֲוִויר | weather | 天気 | m nopl
+מַעֲטָפָה | envelope | 封筒 | f
+מִשְׂרָד | office | 事務所、省 | m
+פָּקִיד, פְּקִידָה | clerk | 事務員 | m,f
+שִׂיחָה | conversation | 会話 | f
+שִׁיעוּרֵי בַּיִת | homework | 宿題 | m pl
+תֵּיבַת דּוֹאַר | mailbox | 郵便受け、ポスト | f
+תַּפּוּחַ עֵץ | apple | りんご | m | תַּפּוּחֵי עֵץ
+תְּשׁוּבָה | answer | 答え | f
+# 文法
+פּוֹעַל | verb | 動詞 | m | פְּעָלִים
+# 形容詞
+יָקָר, יְקָרָה | dear / expensive | 親愛な、高価な | adj
+עָצוּב, עֲצוּבָה | sad | 悲しい | adj
+פָּשׁוּט, פְּשׁוּטָה | simple | 簡単な、単純な | adj
+קָצָר, קְצָרָה | short | 短い | adj
+שָׂמֵחַ, שְׂמֵחָה | happy | うれしい | adj
+# その他
+תֵּן לִי! | give me! / allow me! (m.) | ちょうだい／〜させて（男性に） | m
+תְּנִי לִי! | give me! / allow me! (f.) | ちょうだい／〜させて（女性に） | f
+# 外来語
+גָּז | gas | ガス | m
+אֶלֶקְטְרוֹנִי, אֶלֶקְטְרוֹנִית | electronic | 電子の | adj
+טֶלְכַּרְט | telecard (phone card) | テレホンカード | m
+טֶלֶפוֹן סֶלוּלָרִי, פֶּלֶאפוֹן | cell phone | 携帯電話
+פַקְס | fax | ファックス | m
+` },
+
+{ id: "s12", title: "שיעור 12", page: 266, text: `
+# 動詞
+מְבַקֵּשׁ, לְבַקֵּשׁ | ask | 頼む、求める
+מַמְשִׁיךְ, לְהַמְשִׁיךְ | continue | 続ける
+מִתְחַתֵּן, לְהִתְחַתֵּן (עִם) | marry (with) | （〜と）結婚する
+מִתְכַּתֵּב, לְהִתְכַּתֵּב (עִם) | correspond | （〜と）文通する
+מִתְלַבֵּשׁ, לְהִתְלַבֵּשׁ | dress | 服を着る
+מִתְפַּלֵּל, לְהִתְפַּלֵּל (לְ...) | pray (for) | 祈る
+מִתְרַגֵּשׁ, לְהִתְרַגֵּשׁ (מִ...) | get excited | 感激する、興奮する
+מִתְרַחֵץ, לְהִתְרַחֵץ | bathe / wash oneself | 体を洗う、入浴する
+רוֹחֵץ, לִרְחוֹץ | wash | 洗う
+# 名詞
+גִּיל | age | 年齢 | m
+גֶּשֶׁם | rain | 雨 | m | גְּשָׁמִים
+חַג | holiday / feast | 祝日、祭り | m
+חֲתוּנָּה | wedding | 結婚式 | f
+חָתָן | groom | 花婿 | m
+טַלִּית | tallith (prayer shawl) | タリート（祈祷用ショール） | f | טַלִּיתוֹת
+יָד | hand | 手 | f | יָדַיִים
+יְשִׁיבָה | yeshiva (Talmudic college) | イェシヴァ（タルムード学院） | f
+כַּלָּה | bride | 花嫁 | f
+מוֹדָעָה | notice / ad | 掲示、広告 | f
+מְזוּזָה | mezuzah | メズザ（戸口の聖句箱） | f
+מִקְוֶה | miqwe (ritual bathing place) | ミクヴェ（儀式用の沐浴場） | m | מִקְוָואוֹת
+פַּעַם | once / time | 〜回、一度 | f | פְּעָמִים
+תְּפִילָּה | prayer | 祈り | f
+# 形容詞
+דָּתִי, דָּתִיָּה | religious | 宗教的な、信心深い | adj
+צָעִיר, צְעִירָה | young | 若い | adj
+רַב, רַבָּה | many / much | 多くの | adj
+שָׁחוֹר, שְׁחוֹרָה | black | 黒い | adj
+# その他
+כָּל כָּךְ | so / such / so much | それほど、とても | exp
+לִפְנֵי | before | 〜の前に | prep
+נוֹרָא | very / terrible | ものすごく、ひどい | adv
+# 外来語
+פְּסִיכוֹלוֹג, פְּסִיכוֹלוֹגִית | psychologist | 心理学者 | m,f
+אִינְטֶלִיגֶנְטִי, אִינְטֶלִיגֶנְטִית | intelligent | 知的な | adj
+` },
+
+{ id: "s13", title: "שיעור 13", page: 283, text: `
+# 動詞
+זָז, לָזוּז | move | 動く
+טָס, לָטוּס | fly | 飛ぶ、飛行機で行く
+מְבַקֵּר, לְבַקֵּר | visit | 訪れる
+נָח, לָנוּחַ | rest | 休む
+צָם, לָצוּם | fast | 断食する
+שׁוֹמֵר, לִשְׁמוֹר | observe / keep | 守る
+# 名詞
+אַמְהָרִית | Amharic (lang.) | アムハラ語 | f nopl
+גֶּעֶז | Ge'ez (lang.) | ゲエズ語 | f nopl
+דָּג | fish | 魚 | m
+דֶּלֶת | door | ドア | f
+חוֹר | hole | 穴 | m
+חֲלוֹם | dream | 夢 | m | חֲלוֹמוֹת
+יַהֲדוּת | Judaism | ユダヤ教 | f nopl
+כְּבִישׁ | road | 道路 | m
+כְּפָר | village | 村 | m
+מַחֲנֶה | camp | キャンプ、陣営 | m | מַחֲנוֹת
+מָטוֹס | airplane | 飛行機 | m
+מֶלֶךְ, מַלְכָּה | king, queen | 王、女王 | m,f
+מָסוֹרֶת | tradition | 伝統 | f
+מַקֵּל | stick | 棒、杖 | m | מַקְלוֹת
+מֶרְכָּז | center | 中心、センター | m
+סִימָן | sign | しるし | m
+שְׁכוּנָה | neighborhood | 地区、近所 | f
+# 形容詞
+טָעִים, טְעִימָה | tasty / delicious | おいしい | adj
+קָרוֹב, קְרוֹבָה | close / near | 近い | adj
+שֵׁמִי, שֵׁמִית | Semitic | セム系の | adj
+# 外来語
+ג'וּנְגֶל | jungle | ジャングル | m
+מָרָתוֹן | marathon | マラソン | m
+סְפּוֹרְט | sports | スポーツ | m nopl
+פַּארְק | park | 公園 | m
+קוֹנְגְרֶס | congress | 会議、議会 | m
+# 口語
+כֵּיף | fun | 楽しいこと | sl
+` },
+
+{ id: "s14", title: "שיעור 14", page: 296, text: `
+# 動詞
+מְבָרֵךְ, לְבָרֵךְ (עַל) | bless | 祝福する、祈りを唱える
+מְקַדֵּשׁ, לְקַדֵּשׁ (עַל) | bless / sanctify | 聖別する
+נוֹעֵל, לִנְעוֹל | wear shoes | 靴を履く
+נוֹפֵל, לִיפּוֹל | fall | 落ちる、転ぶ
+נוֹתֵן, לָתֵת (לְ...) | give | 与える
+עוֹמֵד, לַעֲמוֹד | stand | 立つ
+קוֹרֵא, לִקְרוֹא (לְ...) | call | 呼ぶ
+# 名詞
+אוֹת | letter | 文字 | f | אוֹתִיּוֹת
+בֵּן | son / boy | 息子 | m | בָּנִים
+בַּת | girl / daughter | 娘 | f | בָּנוֹת
+בְּרָכָה | blessing | 祝福 | f
+דָּבָר | thing | もの、こと | m | דְּבָרִים
+דְּבַשׁ | honey | はちみつ | m nopl
+זוּג | couple | カップル、一組 | m | זוּגוֹת
+חוֹפֶשׁ | freedom / vacation | 自由、休暇 | m
+טַבַּעַת | ring | 指輪 | f
+טֶקֶס | ceremony | 式典 | m | טְקָסִים
+כְּתוּבָּה | marriage contract | ケトゥバ（婚姻契約書） | f
+מַזָּל | luck, sign of the zodiac | 運、星座 | m | מַזָּלוֹת
+מְכוֹנִית | car | 自動車 | f
+מִנְהָג | custom | 習慣 | m
+מִשְׂחָק | game | ゲーム、試合 | m
+נַעַל | shoe | 靴 | f | נַעֲלַיִים
+# 形容詞
+אָדוֹם, אֲדוּמָּה | red | 赤い | adj
+מַצְחִיק, מַצְחִיקָה | funny | おかしい、面白い | adj
+# 文法
+זָכָר | masculine / male | 男性（形） | m
+נְקֵבָה | feminine / female | 女性（形） | f
+יָחִיד, יְחִידָה | singular | 単数 | m,f
+רַבִּים | plural | 複数 | m pl
+שֵׁם עֶצֶם | noun | 名詞 | m
+שֵׁם תּוֹאַר | adjective | 形容詞 | m
+# 外来語
+אֶגוֹאִיסְטִי, אֶגוֹאִיסְטִית | egoist | 利己的な | adj
+חִינָּה | henna (Henna party) | ヘナ（ヘナの儀式） | f
+קוֹנְסֶרְבָטִיבִי, קוֹנְסֶרְבָטִיבִית | conservative (Jew) | 保守派（ユダヤ教）の | adj
+קוֹקְטֵיל | cocktail | カクテル | m
+שַׁמְפַּנְיָה | champagne | シャンパン | f
+תֵּאוֹרְיָה | theory | 理論 | f
+` },
+
+{ id: "s15", title: "שיעור 15", page: 309, text: `
+# 動詞
+לוֹקֵחַ, לָקַחַת | take | 取る
+מְצַיֵּיר, לְצַיֵּיר | draw | 描く
+עוֹנֶה, לַעֲנוֹת (לְ...) | answer | 答える
+פּוֹחֵד, לִפְחוֹד (מִ...) | be afraid / fear | 怖がる
+# 名詞
+אוֹזֶן | ear | 耳 | f | אוֹזְנַיִים
+אֱמֶת | truth | 真実 | f
+אַף | nose | 鼻 | m
+בֶּטֶן | stomach / tummy | お腹 | f
+גַּב | back | 背中 | m
+גּוּף | body | 体 | m
+זְאֵב, זְאֵבָה | wolf | 狼 | m,f
+יוֹמָן | diary / log book | 日記、手帳 | m
+לֵב | heart | 心臓、心 | m | לְבָבוֹת
+סֵמֶל | symbol | 象徴、シンボル | m
+עִיגּוּל | circle | 円 | m
+עַיִן | eye | 目 | f | עֵינַיִים
+פֶּה | mouth | 口 | m | פִּיּוֹת
+צַוָּאר | neck | 首 | m
+צָרָה | trouble / misfortune | 困りごと、災難 | f
+קַו | line | 線 | m
+רֹאשׁ | head | 頭 | m
+רֶגֶל | leg / foot | 脚、足 | f | רַגְלַיִים
+שֵׁן | tooth | 歯 | f | שִׁינַּיִים
+שֵׂעָר | hair | 髪 | m | שַׂעֲרוֹת
+שַׁרְשֶׁרֶת | chain / necklace | 鎖、ネックレス | f
+# 形容詞
+אָרוֹךְ, אֲרוּכָּה | long | 長い | adj
+# その他
+בְּעֵרֶךְ | about / around | およそ | adv
+בְּתוֹךְ | inside / in | 〜の中に | prep
+שָׂם לֵב, לָשִׂים לֵב | notice / pay attention | 気づく、注意を払う
+שָׂם לְ... רֶגֶל, לָשִׂים לְ... רֶגֶל | trip (someone) up | 〜の足をひっかける
+שְׁנָתַיִים | two years | 2年 | f pl
+# 外来語
+סִימֶטְרְיָה | symmetry | 対称 | f
+אוּנִיבֶרְסָלִי, אוּנִיבֶרְסָלִית | universal | 普遍的な | adj
+סִימֶטְרִי, סִימֶטְרִית | symmetrical | 対称的な | adj
+` },
+
+{ id: "s17", title: "שיעור 17", page: 326, text: `
+# 動詞
+חוֹקֵר, לַחֲקוֹר | research | 研究する
+כּוֹעֵס, לִכְעוֹס (עַל) | be angry | 怒る
+מוֹצֵא, לִמְצוֹא | find / discover | 見つける
+מְסַדֵּר, לְסַדֵּר | arrange | 整理する、手配する
+נוֹלָד, לְהִיוָּלֵד | be born | 生まれる
+עוֹזֵר, לַעֲזוֹר (לְ...) | help | 手伝う、助ける
+# 名詞
+אוֹצָר | treasure | 宝 | m | אוֹצָרוֹת
+אוֹר | light | 光 | m | אוֹרוֹת
+בֵּית הַמִּקְדָּשׁ | The Temple | エルサレム神殿 | m
+זָהָב | gold | 金 | m
+חוֹף | beach / shore | 海岸、浜 | m
+חוֹשֶׁךְ | darkness | 暗闇 | m nopl
+מְגִילָּה | scroll | 巻物 | f
+מְעָרָה | cave | 洞窟 | f
+נוֹצְרִי, נוֹצְרִיָּה | Christian | キリスト教徒 | m,f
+נְחוֹשֶׁת | copper | 銅 | f nopl
+פְּגִישָׁה | meeting | 会合、約束 | f
+# 形容詞
+עָיֵיף, עֲיֵיפָה | tired | 疲れた | adj
+רַע, רָעָה | bad / mean | 悪い、意地悪な | adj
+# 外来語
+אִינְפוֹרְמַצְיָה | information | 情報 | f
+הִיסְטוֹרְיוֹן, הִיסְטוֹרְיוֹנִית | historian | 歴史家 | m,f
+פִילוֹלוֹג, פִילוֹלוֹגִית | philologist | 文献学者 | m,f
+פַנְטַזְיָה | fantasy | 空想、ファンタジー | f
+קוֹמוּנָה | commune | コミューン | f
+תֵּאוֹלוֹג, תֵּאוֹלוֹגִית | theologian | 神学者 | m,f
+# その他
+בָּרֶגֶל | by foot / on foot | 歩いて | adv
+לַסְּפִירָה | A.D. (of a date) | 西暦
+` },
+
+{ id: "s18", title: "שיעור 18", page: 337, text: `
+# 動詞
+גּוֹמֵר, לִגְמוֹר | finish | 終える
+חַי, לִחְיוֹת | live | 生きる、暮らす
+יָשֵׁן, לִישׁוֹן | sleep | 眠る
+מְנַקֶּה, לְנַקּוֹת | clean | 掃除する
+מְרַכֵל, לְרַכֵל (עַל) | gossip | うわさ話をする
+צוֹחֵק, לִצְחוֹק (עַל) | laugh | 笑う
+# 名詞
+אוֹרֵחַ, אוֹרַחַת | guest | 客 | m,f
+אָח, אָחוֹת | brother, sister | 兄弟、姉妹 | m,f | אַחִים, אֲחָיוֹת
+בַּמַּאי, בַּמָּאִית | director | 監督、演出家 | m,f
+בָּשָׂר | meat | 肉 | m
+חוּלְצָה | shirt | シャツ | f
+יָדִיד, יְדִידָה | friend | 友人 | m,f
+כְּלִי | dish / instrument | 器、道具 | m | כֵּלִים
+לִימוּדִים | studies | 学業 | m pl
+מְלָפְפוֹן | cucumber | きゅうり | m
+מָרָק | soup | スープ | m
+נֶכֶד, נֶכְדָּה | grandchild, granddaughter | 孫（男／女） | m,f
+סַבָּא, סַבְתָּא | grandfather, grandmother | 祖父、祖母 | m,f
+צַלַּחַת | plate | 皿 | f
+תַּפּוּחַ אֲדָמָה | potato | じゃがいも | m | תַּפּוּחֵי אֲדָמָה
+# 形容詞
+בָּטוּחַ, בְּטוּחָה | sure / safe | 確かな、安全な | adj
+מְפוּרְסָם, מְפוּרְסֶמֶת | famous | 有名な | adj
+נָשׂוּי, נְשׂוּאָה | married | 既婚の | adj
+רָגִיל, רְגִילָה | regular / usual | 普通の、慣れている | adj
+# 外来語
+אֵירוֹבִּיקָה | aerobics | エアロビクス | f nopl
+יוֹגוּרְט | yogurt | ヨーグルト | m
+סְפּוֹרְטַאי, סְפּוֹרְטָאִית | athlete | スポーツ選手 | m,f
+# その他
+כָּאן | here | ここ | adv
+פּוּרִים | Purim (holiday) | プーリム（祭り） | m pl
+רַבִּי | rabbi | ラビ
+שְׁעָתַיִים | two hours | 2時間 | f pl
+` },
+
+{ id: "s19", title: "שיעור 19", page: 355, text: `
+# 動詞
+בּוֹדֵק, לִבְדּוֹק | check | 調べる、確認する
+יוֹצֵא, לָצֵאת | go out / exit | 出る
+פּוֹתֵחַ, לִפְתּוֹחַ | open | 開ける
+# 名詞
+אַרְיֵה | lion | ライオン | m | אֲרָיוֹת
+בָּצָל | onion | 玉ねぎ | m | בְּצָלִים
+גֶּזֶר | carrot | にんじん | m | גְּזָרִים
+גַּן חַיּוֹת | zoo | 動物園 | m | גַּנֵּי חַיּוֹת
+חוֹקֵר, חוֹקֶרֶת | researcher | 研究者 | m,f
+חַיָּה | animal | 動物 | f
+סַבְלָנוּת | patience | 忍耐 | f nopl
+פִּלְפֵּל | pepper | こしょう、ピーマン | m
+צֶמַח | plant | 植物 | m | צְמָחִים
+קְבוּצָה | group | グループ、チーム | f
+קוֹף | monkey | 猿 | m
+קֶמַח | flour | 小麦粉 | m nopl
+קֶשֶׁר | connection / tie | つながり、関係 | m | קְשָׁרִים
+שָׁכֵן, שְׁכֵנָה | neighbor | 隣人 | m,f
+שֶׁמֶן | oil | 油 | m | שְׁמָנִים
+שַׁעַר | gate | 門 | m | שְׁעָרִים
+תּוֹכְנִית | program / plan | 番組、計画 | f | תּוֹכְנִיּוֹת
+# 外来語
+אַקְוַורְיוּם | aquarium / fish bowl | 水族館、水槽 | m
+בּוֹטָנִי, בּוֹטָנִית | botanical | 植物の | adj
+בּוֹטָנִיקָה | botany | 植物学 | f nopl
+גִּיטָרָה | guitar | ギター | f
+ג'ִירָפָה | giraffe | キリン | f
+הִיפּוֹפּוֹטָם | hippopotamus | カバ | m
+זֶבְּרָה | zebra | シマウマ | f
+טְרוֹפִּי, טְרוֹפִּית | tropical | 熱帯の | adj
+קִילוֹ | kilo | キロ | m nopl
+שִׁימְפַּנְזָה | chimpanzee | チンパンジー | f
+# その他
+אַחַר כָּךְ | later | あとで | adv
+אֵין בְּעַד מָה | you're welcome (after "thank you") | どういたしまして | exp
+הָמוֹן | a lot / many | たくさん | adj
+עוֹד מְעַט | soon / in a little while | もうすぐ | adv
+צָרִיךְ | need / have to | 〜しなければならない
+קוֹדֶם | first / before | まず、先に | adv
+` },
+
+{ id: "s20", title: "שיעור 20", page: 366, text: `
+# 動詞
+זוֹכֵר, לִזְכּוֹר | remember | 覚えている
+לְהַגִּיד | say / tell | 言う
+סוֹגֵר, לִסְגּוֹר | close / shut | 閉める
+שׁוֹכֵחַ, לִשְׁכּוֹחַ | forget | 忘れる
+# 名詞
+חַיָּיל, חַיֶּילֶת | soldier | 兵士 | m,f
+כּוֹחַ | power / force / strength | 力 | m | כּוֹחוֹת
+מְדִינָה | state / country | 国家 | f
+מֶמְשָׁלָה | government | 政府 | f
+נָשִׂיא, נְשִׂיאָה | president | 大統領 | m,f
+פִּרְסוֹמֶת | advertisement / commercial | 広告、CM | f
+קוֹנֶה, קוֹנָה | buyer | 買い手 | m,f
+רֹאשׁ מֶמְשָׁלָה | prime minister | 首相 | m,f
+רֹאשׁ עִיר | mayor | 市長 | m,f
+שְׁבִיתָה | strike | ストライキ | f
+# 形容詞
+רָעֵב, רְעֵבָה | hungry | 空腹の | adj
+# 接続詞
+שֶׁ... | that | 〜ということ | conj
+# 外来語
+אַנְטִישֵׁמִיּוּת | Anti-Semitism | 反ユダヤ主義 | f nopl
+גְּרָפִיקַאי, גְּרָפִיקָאִית | graphic artist | グラフィックデザイナー | m,f
+טוֹן | ton | トン | m | טוֹנוֹת
+סַבּוֹן | soap | 石けん | m
+סוֹצְיוֹלוֹג, סוֹצְיוֹלוֹגִית | sociologist | 社会学者 | m,f
+פּוֹלִיטִיקַאי, פּוֹלִיטִיקָאִית | politician | 政治家 | m,f
+שַׁמְפּוֹ | shampoo | シャンプー | m nopl
+# その他
+הַשָּׁבוּעַ | this week | 今週 | adv
+פַּעַם | once | かつて、一度 | adv
+` },
+
+{ id: "s21", title: "שיעור 21", page: 378, text: `
+# 動詞
+לְהַכִּיר | know (get to know) | 知る、知り合う
+מַגִּיעַ, לְהַגִּיעַ | arrive | 着く
+פּוֹנֶה, לִפְנוֹת | turn | 曲がる
+# 名詞
+בֵּיצָה | egg | 卵 | f | בֵּיצִים
+חַסָּה | lettuce | レタス | f
+טָעוּת | mistake | 間違い | f
+מַדָּע | science | 科学 | m
+מְנוֹרָה | lamp (Menorah) | ランプ、メノラー | f
+נָבִיא, נְבִיאָה | prophet | 預言者 | m,f
+נֶהָג, נַהֶגֶת | driver | 運転手 | m,f
+עֵז | goat | ヤギ | f | עִיזִּים
+פָּסוּק | verse | （聖書の）節 | m | פְּסוּקִים
+רַעְיוֹן | idea | アイデア | m | רַעְיוֹנוֹת
+תַּחֲנָה | station | 駅、停留所 | f
+תַּפּוּחַ | apple | りんご | m
+תַּרְנְגוֹל, תַּרְנְגוֹלֶת | rooster, hen | 雄鶏、雌鶏 | m,f
+# 形容詞
+חָכָם, חֲכָמָה | smart | 賢い | adj
+מֶרְכָּזִי, מֶרְכָּזִית | central | 中央の | adj
+# 外来語
+אוֹרֶגָנוֹ | oregano | オレガノ | m
+בָּזִילִיקוּם | basil | バジル | m
+דּוֹלָר | dollar | ドル | m
+וִיזָה | visa | ビザ | f
+פֶּטְרוֹזִילְיָה | parsley | パセリ | f
+# その他
+גַּן-עֵדֶן | garden of Eden / Heaven | エデンの園、天国 | m
+בְּנֵי יִשְׂרָאֵל | The people of Israel | イスラエルの民
+זְהִירוּת! | Be careful! | 気をつけて！
+יָכוֹל | is able / can | 〜できる
+כְּלוּם | nothing | 何も〜ない
+עַל לֹא דָּבָר | You're welcome | どういたしまして
+עֵץ הַדַּעַת | The Tree of Knowledge | 知恵の木 | m
+מַרְוָה | sage (plant) | セージ | f
+שִׁיר הַשִּׁירִים | The Song of Songs | 雅歌
+תְּאֵנָה | fig | イチジク | f
+תָּמָר | date (fruit / tree) | ナツメヤシ | m
+` },
+
+{ id: "s22", title: "שיעור 22", page: 388, text: `
+# 動詞
+מוֹרִיד, לְהוֹרִיד | take off / decrease | 脱ぐ、下ろす、減らす
+# 名詞
+בֶּגֶד יָם | swimsuit | 水着 | m | בִּגְדֵי יָם
+חָאקִי | khaki | カーキ（の服） | m
+חוּפְשָׁה | vacation | 休暇 | f
+חֲצָאִית | skirt | スカート | f
+חַשְׁמַל | electricity | 電気 | m nopl
+יִשְׂרְאֵלִיּוּת | "Israeliness" | イスラエルらしさ | f nopl
+מוֹשָׁב | settlement | モシャブ（協同農村） | m
+מִכְנָסַיִים | pants / trousers | ズボン | m pl
+מְעִיל | coat | コート | m
+פִּתְרוֹן | solution | 解決策 | m | פִּתְרוֹנוֹת
+פֶּתֶק | note | メモ | m | פְּתָקִים
+שִׂמְלָה | dress | ワンピース、ドレス | f | שְׂמָלוֹת
+# 形容詞
+חָזָק, חֲזָקָה | strong | 強い | adj
+טִיפֵּשׁ, טִיפְּשָׁה | stupid / dumb | ばかな | adj
+טָרִי, טְרִיָּה | fresh | 新鮮な | adj
+מְאוּשָּׁר, מְאוּשֶּׁרֶת | happy | 幸せな | adj
+נוֹחַ, נוֹחָה | comfortable | 快適な | adj
+תַּנַ"כִי, תַּנַ"כִית | Biblical | 聖書の | adj
+# 接続詞
+לָכֵן | therefore | だから | conj
+# 外来語
+אוֹפְּטִימִי, אוֹפְּטִימִית | optimistic | 楽観的な | adj
+בּוּטִיק | boutique | ブティック | m
+מוֹדֶל | model | モデル、型 | m
+נוֹסְטַלְגְּיָה | nostalgia | 郷愁 | f nopl
+סְוֶודֶר | sweater | セーター | m
+פֶּסִימִי, פֶּסִימִית | pessimistic | 悲観的な | adj
+קָרִיקָטוּרָה | caricature | 風刺画 | f
+# その他
+אַף אֶחָד | nobody | 誰も〜ない
+חֲבָל! | It's a pity / It's a shame | 残念！ | interj
+"יִידִישֶׁע מַאמֶע" | "Yiddishe Mama" (Jewish Mother) | イディッシュ・ママ（世話焼きのユダヤ人の母）
+` },
+
+{ id: "s23", title: "שיעור 23", page: 399, text: `
+# 動詞
+חוֹלֶה, לַחֲלוֹת | be sick | 病気になる
+חוֹלֵם, לַחֲלוֹם | dream | 夢を見る
+מֵת, לָמוּת | die | 死ぬ
+שׁוֹקֵל, לִשְׁקוֹל | weigh | 重さを量る、検討する
+# 名詞
+אֶבֶן | stone | 石 | f | אֲבָנִים
+אַגָּדָה | legend / tale | 伝説、物語 | f
+אוֹמָן, אוֹמָנִית | artist | 芸術家 | m,f
+בִּנְיָין | building | 建物 | m
+הַתְחָלָה | beginning | 始まり | f
+חוֹמָה | wall (exp. city walls) | 城壁 | f
+מַחֲלָה | illness / disease | 病気 | f
+מַצָּב | situation / status / condition | 状況、状態 | m
+סוֹפֵר, סוֹפֶרֶת | writer | 作家 | m,f
+פִּיל, פִּילָה | elephant | 象 | m,f
+תְּמוּנָה | picture / painting | 写真、絵 | f
+תְּנַאי | condition | 条件 | m | תְּנָאִים
+# 形容詞
+נָקִי, נְקִיָּה | clean | きれいな、清潔な | adj
+עָשִׁיר, עֲשִׁירָה | rich | 金持ちの | adj
+קָדוֹשׁ, קְדוֹשָׁה | holy | 聖なる | adj
+רָחוֹק, רְחוֹקָה | far | 遠い | adj
+# 外来語
+טוּרְקִי, טוּרְקִית | Turkish | トルコの | adj
+כּוֹלֶרָה | Cholera | コレラ | f
+מִילְיוֹן | million | 100万 | m
+סִימְפָּטִי, סִימְפָּטִית | likable / nice | 感じのいい | adj
+סוּלְטָן | Sultan | スルタン | m
+# その他
+הָעִירָה | to town | 町へ | adv
+מִזְּמַן | a long time ago | ずっと前に | adv
+מִחוּץ לְ... | outside of | 〜の外に | adv
+מִסָּבִיב לְ... | around | 〜の周りに | conj
+עוֹד פַּעַם | one more time / again | もう一度 | adv
+` },
+
+{ id: "s24", title: "שיעור 24", page: 412, text: `
+# 動詞
+כּוֹאֵב, לִכְאוֹב (לְ...) | hurt | 痛む
+כּוֹבֵשׁ, לִכְבּוֹשׁ | conquer / capture | 征服する
+מַאֲמִין, לְהַאֲמִין | believe | 信じる
+עוֹזֵב, לַעֲזוֹב | leave | 去る、離れる
+שׁוֹכֵב, לִשְׁכַּב | lie down | 横になる
+# 名詞
+גְּבֶרֶת | lady / Mrs. | 婦人、〜夫人 | f
+דָּת | religion | 宗教 | f
+הֲלָכָה | rule / the Jewish law | ハラハー（ユダヤ法） | f
+חוֹם | heat / fever | 熱 | m nopl
+כְּאֵב | pain | 痛み | m
+כְּתוֹבֶת | address | 住所 | f
+מִזְוָודָה | suitcase | スーツケース | f
+מִשְׁטָרָה | police | 警察 | f nopl
+מְשׁוֹרֵר, מְשׁוֹרֶרֶת | poet | 詩人 | m,f
+נֶפֶשׁ | soul / mind | 魂、心 | f
+קְהִילָּה | community | 共同体、コミュニティ | f
+רְפוּאָה | medicine | 医学 | f nopl
+שׁוֹטֵר, שׁוֹטֶרֶת | policeman, policewoman | 警察官 | m,f
+שִׂמְחָה | happiness / festivity | 喜び、祝い事 | f | שְׂמָחוֹת
+תַּאֲרִיךְ | date | 日付 | m
+תְּעוּדָה | certificate / document | 証明書 | f
+תְּקוּפָה | period / era | 時代 | f
+# 形容詞
+חוֹפְשִׁי, חוֹפְשִׁית | free | 自由な | adj
+# 前置詞
+בֵּין | between | 〜の間に | prep
+# 外来語
+אַי-קְיוּ | I.Q. | IQ
+אָקָמוֹל | Acamol (pain killer brand) | アカモル（鎮痛薬） | m
+מוּסְלְמִי, מוּסְלְמִית | Muslim | イスラム教徒 | m,f
+אוֹטוֹנוֹמִי, אוֹטוֹנוֹמִית | autonomous | 自治の | adj
+פִיזִיקָה | physics | 物理学 | f nopl
+# その他
+בֶּן בַּיִת | frequenter (member of the family) | 家族同然の人 | m
+בְּעוֹד | in a... (indicating time) | 〜後に | conj
+הָעֶרֶב | this evening | 今晩 | adv
+כׇּל הַכָּבוֹד! | Bravo! | よくやった！ | exp
+מְעַט | a little / few | 少し
+` },
+
+{ id: "s25", title: "שיעור 25", page: 430, text: `
+# 動詞
+מְטַלְפֵן, לְטַלְפֵן | call / phone | 電話する
+מְלַמֵּד, לְלַמֵּד | teach | 教える
+שׁוֹבֵר, לִשְׁבּוֹר | break | 壊す
+# 名詞
+בֶּן דּוֹד, בַּת דּוֹד | cousin | いとこ | m,f
+בְּרֵיכָה | pool | プール | f
+וִיכּוּחַ | argument | 議論、口論 | m
+מִקְדָּשׁ | temple | 神殿 | m
+סֶלַע | rock | 岩 | m | סְלָעִים
+עָבָר | (the) past | 過去 | m nopl
+עַמּוּד | pillar / pole | 柱、ページ | m
+שֵׁבֶט | tribe | 部族 | m | שְׁבָטִים
+תּוֹשָׁב, תּוֹשֶׁבֶת | inhabitant / resident | 住民 | m,f
+תְּרוּפָה | medicine / medication | 薬 | f
+# 形容詞
+זָקֵן, זְקֵנָה | old (animate) | 年老いた | adj
+סִינִי, סִינִית | Chinese | 中国の | adj
+שׁוֹנֶה, שׁוֹנָה | different | 違う、さまざまな | adj
+# 外来語
+אֵיידְס | A.I.D.S. | エイズ | m nopl
+גֵּאוֹלוֹג, גֵּאוֹלוֹגִית | geologist | 地質学者 | m,f
+פּוֹלְיוֹ | Polio | ポリオ | m nopl
+# その他
+בְּדִיּוּק | exactly | ちょうど、正確に | adv
+הֲכִי | the most (exp. the most beautiful) | 最も
+לוּחוֹת הַבְּרִית | The Tablets of the Covenant | 契約の石板 | m pl
+שְׁטוּיּוֹת | nonsense | ばかげたこと | f pl
+` },
+
+{ id: "s26", title: "שיעור 26", page: 443, text: `
+# 動詞
+גָּדֵל, לִגְדּוֹל | grow | 育つ、成長する
+מְחַמֵּם, לְחַמֵּם | warm | 温める
+מְעַשֵּׁן, לְעַשֵּׁן | smoke | タバコを吸う
+נִכְנָס, לְהִיכָּנֵס (לְ...) | enter | 入る
+נִפְגָּשׁ, לְהִיפָּגֵשׁ (עִם) | meet | （〜と）会う
+נִשְׁאָר, לְהִישָּׁאֵר (בְּ...) | stay / remain | 残る、とどまる
+עוֹצֵר, לַעֲצוֹר | stop | 止める、止まる
+שׂוֹחֶה, לִשְׂחוֹת | swim | 泳ぐ
+# 名詞
+אֲתָר | site | 遺跡、サイト | m
+חוֹק | law | 法律 | m
+טַיֶּילֶת | promenade | 遊歩道 | f nopl
+יָמִין | right (side) | 右 | m
+כְּנֵסִיָּה | church | 教会 | f
+מַטְבֵּעַ | coin | 硬貨 | m | מַטְבְּעוֹת
+מִסְגָּד | mosque | モスク | m
+נַצְרוּת | Christianity | キリスト教 | f nopl
+צַד | side | 側 | m | צְדָדִים
+שְׂמֹאל | left | 左 | m
+תַּיָּירוּת | tourism | 観光 | f nopl
+# 形容詞
+טִבְעִי, טִבְעִית | natural | 自然な | adj
+עָנִי, עֲנִיָּה | poor | 貧しい | adj
+# 外来語
+אִיסְלָאם | Islam | イスラム教 | m nopl
+דַּמְקָה | checkers | チェッカー | f
+# 前置詞
+מוּל | opposite / in front / across from | 〜の向かいに | prep
+# 口語
+נוּדְנִיק, נוּדְנִיקִית | a "nag" / pest / nudge | しつこい人 | m,f sl
+` },
+
 ];

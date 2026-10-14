@@ -142,6 +142,9 @@
   .seg{display:flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;flex-wrap:wrap}
   .seg button{flex:1 1 0;border:0;background:var(--surface);padding:8px 6px;font-size:.85rem;border-right:1px solid var(--line)}
   .seg button:last-child{border-right:0}
+  .dirbar{flex-wrap:nowrap}
+  .dirbar button{flex:2 1 0;font-size:.78rem;padding:9px 2px;white-space:nowrap}
+  .dirbar button:last-child{flex:1 1 0}
   .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:700}
   textarea{width:100%;min-height:90px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--r);padding:8px;font:12px/1.4 ui-monospace,monospace}
   .note{font-size:.8rem;color:var(--muted)}
@@ -288,6 +291,19 @@
                         <div class="cat">${esc(w.cat)}</div>`;
   const pluralHtml = w => w.plural ? `<div class="plural">複数形 <span class="he" lang="he">${esc(w.plural)}</span></div>` : "";
 
+  // ---------- direction switch (shown on study & quiz) ----------
+  const DIRS = [["he", "ヘブライ語→日本語"], ["mean", "日本語→ヘブライ語"], ["mix", "ランダム"]];
+  const dirBar = () => `<div class="seg dirbar" role="group" aria-label="出題の向き">${DIRS.map(([v, l]) =>
+    `<button data-dir="${v}" aria-pressed="${S.set.dir === v}">${l}</button>`).join("")}</div>`;
+  const pickDir = () => S.set.dir === "mix" ? (Math.random() < .5 ? "he" : "mean") : S.set.dir;
+  view.addEventListener("click", e => {
+    const b = e.target.closest("[data-dir]"); if (!b) return;
+    S.set.dir = b.dataset.dir; save();
+    if (session) session.queue.forEach(w => session.dir[w.id] = pickDir());
+    if (quiz && quiz.qs) quiz.qs.forEach((q, i) => { if (i > quiz.i || (i === quiz.i && !quiz.picked)) q.dir = pickDir(); });
+    render();
+  });
+
   // ---------- study (spaced repetition) ----------
   let session = null;   // { queue:[word], dir:{id:'he'|'mean'}, flipped, done }
   function buildSession(extraNew) {
@@ -296,7 +312,7 @@
     const fresh = p.filter(w => !S.prog[w.id]).slice(0, extraNew ?? S.set.newPer);
     const queue = [...due, ...fresh];
     const dir = {};
-    queue.forEach(w => dir[w.id] = S.set.dir === "mix" ? (Math.random() < .5 ? "he" : "mean") : S.set.dir);
+    queue.forEach(w => dir[w.id] = pickDir());
     session = { queue, dir, flipped: false, done: 0 };
   }
   function grade(g) {
@@ -346,6 +362,7 @@
       return fmtIv(IV[Math.min(7, l + 2)] * 1.3); };
     view.innerHTML = `
       <div style="display:flex;flex-direction:column;gap:12px">
+        ${dirBar()}
         <div class="qhead"><span>${isNew ? "新しい単語" : "復習"}</span><span class="num">残り ${session.queue.length}</span></div>
         <div class="card" id="card" role="button" tabindex="0" aria-label="カードをめくる">
           ${sideTab(w)}
@@ -376,8 +393,7 @@
       const other = p.filter(x => x !== w && x.cat !== w.cat && x.ja !== w.ja);
       const dis = shuffle(same).slice(0, 3);
       if (dis.length < 3) dis.push(...shuffle(other).slice(0, 3 - dis.length));
-      const dir = S.set.dir === "mix" ? (Math.random() < .5 ? "he" : "mean") : S.set.dir;
-      return { w, dir, opts: shuffle([w, ...dis]) };
+      return { w, dir: pickDir(), opts: shuffle([w, ...dis]) };
     });
     quiz = { qs, i: 0, score: 0, picked: null, wrong: [] };
   }
@@ -408,6 +424,7 @@
       ? `<button data-o="${o.id}">${esc(S.set.lang === "en" ? o.en : o.ja)}</button>`
       : `<button class="he" lang="he" data-o="${o.id}">${esc(showHe(o.he))}</button>`;
     view.innerHTML = `<div style="display:flex;flex-direction:column;gap:12px">
+      ${dirBar()}
       <div class="qhead"><span class="num">${quiz.i + 1} / ${quiz.qs.length}</span><span class="num">正解 ${quiz.score}</span></div>
       <div class="bar"><i style="width:${quiz.i / quiz.qs.length * 100}%"></i></div>
       <div class="card" style="min-height:200px;cursor:default">${sideTab(w)}${prompt}
@@ -476,7 +493,7 @@
   function renderSettings() {
     const studied = Object.keys(S.prog).length;
     view.innerHTML = `<div class="panel">
-      <div class="field"><span class="lbl">出題の向き</span>${seg("dir", [["he", "ヘブライ語 → 意味"], ["mean", "意味 → ヘブライ語"], ["mix", "ランダム"]])}</div>
+      <div class="field"><span class="lbl">出題の向き</span>${seg("dir", DIRS)}</div>
       <div class="field"><span class="lbl">問題のニクダー（母音記号）</span>${seg("niqqud", [["true", "表示する"], ["false", "隠す（答えでは表示）"]])}</div>
       <div class="field"><span class="lbl">意味の表示</span>${seg("lang", [["both", "日本語＋English"], ["ja", "日本語"], ["en", "English"]])}</div>
       <div class="field"><span class="lbl">1回あたりの新しい単語</span>${seg("newPer", [[5, "5"], [10, "10"], [15, "15"], [25, "25"], [40, "40"]])}</div>
