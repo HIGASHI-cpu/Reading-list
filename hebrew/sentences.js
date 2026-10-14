@@ -308,4 +308,28 @@ window.SENTENCE_UNITS = [
 אֵיזֶה נוּדְנִיק! | eize nudnik! | なんてしつこいやつ！
 ` },
 
+{ id: "s27", text: `
+בַּחֲנוּכָּה מַדְלִיקִים אֶת הַחֲנוּכִּיָּה. | ba-chanuka madlikim et ha-chanukiya. | ハヌカにはハヌキヤに火をともす。
+הַיְּלָדִים מְשַׂחֲקִים בִּסְבִיבוֹן. | ha-yeladim mesachakim bi-svivon. | 子どもたちはコマで遊ぶ。
+נֵס גָּדוֹל הָיָה שָׁם. | nes gadol haya sham. | 大きな奇跡がそこで起きた。（ハヌカのコマの言葉）
+אֲנִי לֹא מַסְכִּים אִתְּךָ. | ani lo maskim itcha. | 君には同意しない。
+כְּדַאי לָלֶכֶת לִישׁוֹן מוּקְדָּם. | kedai lalechet lishon mukdam. | 早く寝たほうがいい。
+סוֹף-סוֹף הֶחְלַטְנוּ! | sof-sof hechlatnu! | ついに決めた！
+רוֹב הַחֶבְרֶה בָּאִים לְסֵדֶר פֶּסַח. | rov ha-chevre baim le-seder pesach. | 仲間のほとんどがセデルに来る。
+יֵשׁ לִי שַׁפַּעַת. | yesh li shapaat. | インフルエンザにかかっている。
+הוּא מַקְשִׁיב לַמּוֹרֶה בְּמֶשֶׁךְ כָּל הַשִּׁיעוּר. | hu makshiv la-more be-meshech kol ha-shiur. | 彼は授業のあいだずっと先生の話を聞いている。
+` },
+
+{ id: "s28", text: `
+אֲנִי מַבְטִיחַ לְךָ! | ani mavtiach lecha! | 約束するよ！
+הוּא הִתְאַהֵב בָּהּ מִיָּד. | hu hitahev ba miyad. | 彼はすぐに彼女に恋をした。
+אֲנִי מְנַסֶּה לְדַבֵּר רַק עִבְרִית. | ani menase ledaber rak ivrit. | ヘブライ語だけで話そうとしている。
+אֲנִי מִשְׁתַּמֵּשׁ בַּמַּחְשֵׁב כָּל יוֹם. | ani mishtamesh ba-machshev kol yom. | 毎日コンピューターを使う。
+הִיא מִסְתַּכֶּלֶת עַל הַשָּׁמַיִם. | hi mistakelet al ha-shamayim. | 彼女は空を眺めている。
+הַתַּרְבּוּת מַשְׁפִּיעָה עַל הַשָּׂפָה. | ha-tarbut mashpia al ha-safa. | 文化は言語に影響を与える。
+הוּא מִתְנַדֵּב בְּלֵב שָׁלֵם. | hu mitnadev be-lev shalem. | 彼は心からボランティアをしている。
+יֵשׁ שְׁגִיאָה בַּמִּכְתָּב. | yesh sgia ba-michtav. | 手紙に誤りがある。
+בַּמַּחֲזֶה יֵשׁ לִי תַּפְקִיד קָטָן. | ba-machaze yesh li tafkid katan. | その劇で僕は小さな役をもらっている。
+` },
+
 ];
